@@ -1,33 +1,34 @@
 <!-- Your Project title, make it sound catchy! -->
 
-# Project title
+# Cracking time's code: Survival analysis of large datasets
 
 <!-- Provide a short description to your project -->
 
 ## Description
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam vitae pulvinar
-mauris. Praesent sollicitudin rutrum mauris sed congue. Donec vel orci elit.
-Phasellus luctus sodales elementum. Donec lacinia semper lorem, volutpat
-molestie arcu bibendum mollis. Nulla nec massa vitae sapien varius vulputate
-vel vitae ex. Curabitur convallis iaculis elit at faucibus. Sed eget facilisis
-orci, ut consequat neque.
+This is a special type of analysis that takes into consideration when the event occurred rather than if the event occurred. In other words, we are focused on acquiring the rate, which is the number of events per unit time. In this exemplar will introduce you to the concept of survival analysis (also known as a time-to-event analysis) using large datasets using R. Firstly, I will highlight the steps needed to effectively clean the data, including correct censoring of the participants.
+Secondly, I will demonstrate two approaches: a univariable and a multivariable Cox Proportional regression model (which allows the incorporation of confounders). Thirdly, we will be able to estimate the hazard ratio of an event occurring between two groups and present our findings in a Kaplan-Meier curve(univariable analysis) or in a table/forest plot (multivraible).
+
+This special type of analysis allows to calculate the risk of the event (disease, death…) occurring at a given time (hazard ratio). A common timescale used in survival analysis is time-to-event, however in large cohort studies data may be left-truncated (participants entering the study at different time points), making the time-scale unsuitable. Instead, age should be considered as the timescale. This is most relevant when exploring age-dependent associations between exposures and outcomes. Therefore, it ensures accurate estimation of hazard risk and median survival times, preventing underestimation. In summary, survival analysis using large cohort data may be challenging and require throughout understanding of the data to ensure correct interpretability of the results.
 
 <!-- What should the students going through your exemplar learn -->
 
 ## Learning Outcomes
 
-- Skill 1
-- Skill 2
-- Skill 3
+- Understand the different types of censoring and how to curate your data 
+- Conduct univariable and multivariable survival analysis using R
+- Graphically present the findings of a survival analysis
+- Interprete the results from a survival analysis
 
 <!-- How long should they spend reading and practising using your Code.
 Provide your best estimate -->
 
 | Task       | Time    |
 | ---------- | ------- |
-| Reading    | 3 hours |
-| Practising | 3 hours |
+| Pre-session material    | 1.5 hours |
+| Curating data | 2 hours |
+| Analysis | 1.5 Hour|
+| Visualising and understanding results| 1 hour|
 
 ## Requirements
 
