@@ -27,8 +27,8 @@ Provide your best estimate -->
 | ---------- | ------- |
 | Pre-session material| 1.5 hours |
 | Data curation| 2 hours |
-| Analysis | 1.5 hours |
-| Visualisation & Interpretation of results| 1 hour |
+| Analysis | 2 hours |
+| Visualisation & Interpretation of results| 2 hours |
 
 ## Requirements
 
