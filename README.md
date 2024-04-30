@@ -25,10 +25,10 @@ Provide your best estimate -->
 
 | Task       | Time    |
 | ---------- | ------- |
-| Pre-session material    | 1.5 hours |
-| Curating data | 2 hours |
-| Analysis | 1.5 Hour|
-| Visualising and understanding results| 1 hour|
+| Pre-session material| 1.5 hours |
+| Data curation| 2 hours |
+| Analysis | 1.5 hours |
+| Visualisation & Interpretation of results| 1 hour |
 
 ## Requirements
 
