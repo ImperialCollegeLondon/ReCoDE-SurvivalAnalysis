@@ -1,0 +1,123 @@
+---
+title: "Survival analysis LTRC data (ReCoDe)"
+author: "Valentina Quintero Santofimio"
+date: "2024-05-09"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+#Survival analysis using age as scale (LTRC models)
+#To add types of death grouping code
+#Add forest plot in visualisation section
+
+#Data Curation
+```{r}
+#Months need to be in number and not character
+death$monthofbirth <- as.character(death$meta.monthofbirth)
+death$monthofbirth[death$monthofbirth == "January"] <- "01"
+death$monthofbirth[death$monthofbirth == "February"] <- "02"
+death$monthofbirth[death$monthofbirth == "March"] <- "03"
+death$monthofbirth[death$monthofbirth == "April"] <- "04"
+death$monthofbirth[death$monthofbirth == "May"] <- "05"
+death$monthofbirth[death$monthofbirth == "June"] <- "06"
+death$monthofbirth[death$monthofbirth == "July"] <- "07"
+death$monthofbirth[death$monthofbirth == "August"] <- "08"
+death$monthofbirth[death$monthofbirth == "September"] <- "09"
+death$monthofbirth[death$monthofbirth == "October"] <- "10"
+death$monthofbirth[death$monthofbirth == "November"] <- "11"
+death$monthofbirth[death$monthofbirth == "December"] <- "12"
+
+#Format of year XXXX- MonthXX- day XX 
+death$dateofbirth <- paste0(death$yearofbirth,"-", death$monthofbirth, "-01")
+death$dateofbirth <- as.Date(death$dateofbirth)
+death$dateofdeath <- as.Date(death$dateofdeath)
+death$now_cens <- as.Date("2022-01-01") #Change to whatever censoring date
+
+death$timetoevent <- death$dateofdeath - death$dateofbirth 
+death$timetocens <- death$now_cens - death$dateofbirth 
+
+#Select final time if not dead then censoring date
+death$time <- ifelse(is.na(death$dateofdeath), death$timetocens, death$timetoevent)
+
+death$time_years <- death$time/365.25 #To have time in years
+
+##Censoring of participants- do we know when they died? if so = 1 (Event occurs)
+##Otherwise = 0 as we do not know when this could happen. 
+#do for all types of deaths e.g below 
+death$allcause_death <- as.character(death$allcause_death)
+death$allcause_death[is.na(death$allcause_death)] <- 0 #No event occured (ALIVE)
+death$allcause_death[death$allcause_death > 0] <- 1 #Event occurs (Death)
+
+death$respi_death <- as.character(death$respi_death)
+death$respi_death[is.na(death$respi_death)] <- 0 #No event occured (ALIVE)
+death$respi_death[death$respi_death > 0] <- 1
+````
+
+#Cox Proportional Hazard Model
+```{r}
+#Survival analysis people with [disease] vs [no disease] 
+library(survival)
+library(survminer)
+library(ggplot2)
+library(gtsummary)
+
+#Build survival model
+LTRC_ats <- Surv(time =death$Age, time2 = death$time_years, event = death$allcause_death)
+
+#Unadjusted for covariates
+#fit1 <- survfit(LTRC_ats ~ SAO_fef2575, data = death)
+
+#All cause mortality
+fit3 <- survfit(LTRC_ats ~ SAO.fev3fev6, data = death)
+coxph_LTRC_fev3.fev6 <- coxph(LTRC_ats~SAO.fev3fev6 + Sex + Ethnicity + Smoking_status +
+                                Smoking_pack_yrs + Townsend_deprivation_index + 
+                                UKB_centre, data = death)
+summary(coxph_LTRC_fev3.fev6)
+
+#Nice table for export
+coxph_LTRC_fev3.fev6 %>% tbl_regression(exponentiate= TRUE) %>% bold_p(t = 0.05)
+
+#Name as t1 if doing different type of death analysis 
+
+#Respiratory mortality
+LTRC_ats_isolated <- Surv(time =death2$Age, time2 = death2$time_years, event = death2$respi_death) #Change death e.g respiratory 
+
+coxph_isolated_fev3.fev6 <- coxph(LTRC_ats_isolated~isolatedfev3fev6 + Sex + Ethnicity + Smoking_status +
+                                    Smoking_pack_yrs + Townsend_deprivation_index + 
+                                    UKB_centre, data = death2)
+summary(coxph_isolated_fev3.fev6)
+
+t2 <- coxph_isolated_fev3.fev6 %>% tbl_regression(exponentiate= TRUE) %>% bold_p(t = 0.05) 
+
+tbl_merge_ex2 <-
+  tbl_merge(
+    tbls = list(t1, t2, t3, t4) #all tables done,
+    tab_spanner = c("**All-cause mortality**", "**Respiratory mortality**",
+                    "**Cardiovascular mortality**", "**Cancer mortality**")
+  )
+
+tbl_merge_ex2 %>%
+  as_flex_table() %>%
+  flextable::save_as_docx(path = "isolatedfev3fev6_deathtypes.docx")
+```
+#Visualisation of results
+```{r}
+#### KM plot for Uni-variable analysis### not v helpful for multivariable
+
+ggsurvplot(fit1,
+           pval = TRUE, conf.int = TRUE,
+           risk.table = TRUE,
+           risk.table.col = "strata", 
+           linetype = "strata", 
+           legend.title = "Status",
+           xlab="Time (Years)",
+           surv.median.line = "hv", 
+           ggtheme = theme_bw(), 
+           palette = c("#E7B800", "#2E9FDF"))
+
+```
