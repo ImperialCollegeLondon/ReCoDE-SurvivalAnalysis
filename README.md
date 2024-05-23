@@ -29,6 +29,7 @@ Provide your best estimate -->
 | Data curation| 2 hours |
 | Analysis | 2 hours |
 | Visualisation & Interpretation of results| 2 hours |
+| Extension task | 1.5 hours |
 
 ## Requirements
 
