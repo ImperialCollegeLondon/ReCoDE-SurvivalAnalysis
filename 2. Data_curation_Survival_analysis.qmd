@@ -1,0 +1,107 @@
+---
+title: "2. Data Curation Survival_analysis"
+author: "Valentina Quintero Santofimio"
+format: html
+editor: visual
+---
+# The UK Biobank (synthetic) dataset
+
+Throughout this project, we will use a synthetic version of the UK Biobank data. The UK Biobank is a large cohort data set composed of over 500,000 volunteers recruited across United Kingdom between 2006-2010. For this project, we will use data from 252,877 participants who have high quality lung function data to select participants with airflow obstruction (defined as FEV1/FVC < LLN)
+
+## Essential variables 
+
+| **Event (death) variables** 	| **Description** 	| **Coding** 	| **Outcome variable** 	| **Description** 	| **Coding** 	|
+|---	|---	|---	|---	|---	|---	|
+| cofdmain 	| Main cause of death coded by International Classification of Disease v10 (ICD10) This variable will be used later in the course to stratify the analysis by type of death 	| 0 = No event (alive/censored) 1 = Event (dead) 	| AO.fev1fvc 	| Airflow obstruction derived as:  forced expiratory volume at 1 s/ forced vital capacity below the lower limit of normal  (from NHANES equations)  (FEV1/FVCLLN) 	| 0 = No airflow obstruction 1 = Airflow obstruction 	|
+
+## Additional variables used in the multivariable (adjusted model)
+
+| Covariates name | Description | Coding |
+|-----------------|------------------------------------------------------------|---------------------------------------------------------------------------------------------------|
+| eid             | Unique participant Identification Number for anonymised data   | Interger |
+| Age             | Age of participant at recruitment (when they entered the study) | Interger                                                                                             |
+| Sex             | Sex of participant                                | Male, Female                                                                                                             |
+| bmi             | Body Max Index of participant  |  Numeric                                                                                                                              |
+| UKB_centre      | UK Biobank Centre at which the participant was recruited    | Character                                                                                                  |
+| Ethnicity       | Genetically-derived ethnicity of the participant    |  White vs Other                                                                                                          |
+| Smoking_status  | Smoking Status of the participant at recruitment     | Never, current, previous |                                                                                                
+
+
+
+# 2. Data Curation
+Note: the Surv() function (next chapter) in the {survival} package accepts different formatting of the event date e.g. TRUE/FALSE, where TRUE is event and FALSE is censored; 1/0 where 1 is event and 0 is censored; or 2/1 where 2 is event and 1 is censored. 
+
+Please make sure that the event is properly formatted. **In this example we will be using 0/1**
+```{r}
+# Load Data set 
+
+death <- read.table("data/synthetic_data_ReCoDe.txt", header=TRUE, sep="\t")
+
+#Months need to be in number and not character
+death$monthofbirth <- as.character(death$monthofbirth)
+death$monthofbirth[death$monthofbirth == "January"] <- "01"
+death$monthofbirth[death$monthofbirth == "February"] <- "02"
+death$monthofbirth[death$monthofbirth == "March"] <- "03"
+death$monthofbirth[death$monthofbirth == "April"] <- "04"
+death$monthofbirth[death$monthofbirth == "May"] <- "05"
+death$monthofbirth[death$monthofbirth == "June"] <- "06"
+death$monthofbirth[death$monthofbirth == "July"] <- "07"
+death$monthofbirth[death$monthofbirth == "August"] <- "08"
+death$monthofbirth[death$monthofbirth == "September"] <- "09"
+death$monthofbirth[death$monthofbirth == "October"] <- "10"
+death$monthofbirth[death$monthofbirth == "November"] <- "11"
+death$monthofbirth[death$monthofbirth == "December"] <- "12"
+
+#Format of year XXXX- MonthXX- day XX 
+death$dateofbirth <- paste0(death$yearofbirth,"-", death$monthofbirth, "-01")
+death$dateofbirth <- as.Date(death$dateofbirth)
+death$date_of_death <- as.Date(death$date_of_death)
+death$now_cens <- as.Date("2023-01-01") #Change to "end of study" censoring date
+
+death$timetoevent <- death$date_of_death - death$dateofbirth 
+death$timetocens <- death$now_cens - death$dateofbirth 
+
+#Select final time if not dead then censoring date
+death$time <- ifelse(is.na(death$date_of_death), death$timetocens, death$timetoevent)
+
+death$time_years <- death$time/365.25 #To have time in years
+
+##Censoring of participants- do we know when they died? if so = 1 (Event occurs)
+##Otherwise = 0 as we do not know when this could happen. 
+
+death$allcause_death <- as.character(death$cofdmain)
+death$allcause_death[is.na(death$allcause_death)] <- 0 #No event occured (ALIVE)
+death$allcause_death[death$allcause_death > 0] <- 1 #Event occurs (Death)
+```
+
+
+## Overview of the data 
+```{r}
+library(knitr)
+
+head_data <- head(death[, c("Sex","Smoking_status", "allcause_death", "time_years")], 15)
+
+# Create a table
+kable(head_data, caption = "First 15 Observations of Survival Analysis Data")
+
+```
+
+## How many participants have experienced the event? (e.g. dead)
+
+```{r}
+
+library(dplyr)
+library(tidyr)
+library(knitr)
+
+# Create a summary table
+summary_table <- death %>%
+  group_by(Sex, allcause_death) %>%
+  summarise(count = n(), .groups = 'drop') %>%
+  pivot_wider(names_from = Sex, values_from = count, values_fill = list(count = 0)) %>%
+  mutate(Total = Male + Female)
+
+# Display the summary table
+kable(summary_table, caption = "Count of All-Cause Death by Sex")
+
+```

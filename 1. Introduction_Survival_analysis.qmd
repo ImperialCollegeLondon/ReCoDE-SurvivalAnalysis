@@ -1,0 +1,43 @@
+---
+title: "Survival analysis of Left-Truncated and Right-Censored Data"
+author: "Valentina Quintero Santofimio"
+format: html
+editor: visual
+---
+
+# 1. Introduction
+
+## Welcome to Survival analysis of Left-Truncated and Right-Censored data ReCoDe Project
+
+This project is designed to guide you through the process of performing survival analysis using large cohort data. Survival analysis, also known as time-to-event analysis, is a statistical method used to quantify the risk and timing of events, such as death, disease onset, or other significant occurrences. This type of analysis is particularly powerful in medical and epidemiological research, where understanding the duration until an event occurs can provide critical insights into patient outcomes and treatment efficacy.
+
+It is structured into a series of sections, which will introduce you to the fundamental concepts, techniques, and applications of survival analysis. The aim is for you to learn how to manage and analyse large data sets, apply appropriate statistical models, interpret results, and draw meaningful conclusions about survival probabilities and hazard functions.
+
+### Project Layout
+
+```{mermaid}
+flowchart LR
+  A(Data Curation) --> B(Cox Proportional Regression Model)
+  B --> C(Univariable Analysis)
+  B --> D(Multivariable Analysis)
+  C --> E[Kaplan -Meier Curve]
+  C --> F[Log-Rank Test]
+  D --> G[Hazard Ratio Table]
+  D --> H[Forest Plot]
+  
+  F --> I{Interpretation of results}
+  E --> I
+  G --> I
+  H --> I
+```
+
+# Learning outcomes 
+At the end of this project you should be able to: 
+
+- To understand the different types of censoring and how to curate your data
+- Conduct univariable and multivariable survival analysis using R
+- Graphically present the findings of a survival analysis
+- Interprete the results from a survival analysis
+
+## Pre-requisites
+

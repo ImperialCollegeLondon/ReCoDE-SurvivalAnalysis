@@ -1,0 +1,124 @@
+---
+title: "5. Extension_task_Survival_analysis"
+author: "Valentina Quintero Santofimio"
+format: html
+editor: visual
+---
+# 5. Extension task
+
+## Survival analysis stratified by cause of death
+#### Arrange mortality data by types of death and all cause mortality ICD codes  
+```{r}
+#Using same data set as above 
+
+#Classify type of death according to International Classificaiton of Disease Code (ICD-10)
+library(plyr)
+
+#ICD10 codes from I05-I89
+cardiovascular <- death %>%
+  filter(str_detect(cofdm, "I"))
+
+tojoincardio <- data.frame(cardiovascular$eid, cardiovascular$cofdm)
+death <- join(death, tojoincardio, type="left", by="eid")
+
+death$cardio_death <- ifelse(is.na(death$cardiovascular.cofdm), 0,1)
+
+#ICD10 codes from J00-J99
+respiratory <- death %>%
+  filter(str_detect(cofdm, "J"))
+
+tojoinrespi <- data.frame(respiratory$eid, respiratory$cofdm)
+death <- join(death, tojoinrespi, type="left", by="eid")
+
+death$respi_death <- ifelse(is.na(death$respiratory.cofdm), 0,1)
+
+
+#ICD10 codes from C00-C97 and D10-D48
+cancer <- death %>%
+  filter(str_detect(cofdm, "C|D10|D11|D12|D13|D14|D15|D16|D17|D18|D19|D20|D21|D22
+                    |D23|D24|D25|D26|D27|D28|D29|D30|D31|D32|D33|D34
+                    |D35|D36|D37|D38|D39|D40|D41|D42|D43|D44|D45|D46|D47|D48"))
+
+tojoincancer <- data.frame(cancer$eid, cancer$cofdm)
+death <- join(death, tojoincancer, type="left", by="eid")
+
+death$cancer_death <- ifelse(is.na(death$cancer.cofdm), 0,1)
+
+```
+
+## Data curation 
+```{r}
+#Same as above but now with the different types of death 
+
+#Cardiovascular mortality 
+death$cardio_death <- as.character(death$cardio_death)
+death$cardio_death[is.na(death$cardio_death)] <- 0 #No event occured (ALIVE)
+death$cardio_death[death$cardio_death > 0] <- 1
+
+#Respiratory mortality
+death$respi_death <- as.character(death$respi_death)
+death$respi_death[is.na(death$respi_death)] <- 0 #No event occured (ALIVE)
+death$respi_death[death$respi_death > 0] <- 1
+
+#Neoplasm mortality
+death$cancer_death <- as.character(death$cancer_death)
+death$cancer_death[is.na(death$cancer_death)] <- 0 #No event occured (ALIVE)
+death$cancer_death[death$cancer_death > 0] <- 1
+
+```
+
+## Survival analysis (Multivariable) for all types of death 
+```{r}
+library(gtsummary)
+
+LTRC_ats <- Surv(time =death$Age, time2 = death$time_years, event = death$allcause_death)
+
+coxph <- coxph(LTRC_ats ~ AO.fev1fvc + Sex + Ethnicity + bmi + Smoking_status +Smoking_pack_yrs + Townsend_deprivation_index + 
+                                UKB_centre, data = death)
+summary(coxph)
+
+coxph %>% tbl_regression(exponentiate= TRUE) %>% bold_p(t = 0.05) 
+
+
+t1 <- coxph %>% tbl_regression(exponentiate= TRUE) %>% bold_p(t = 0.05) 
+
+#Respiratory mortality
+LTRC_ats<- Surv(time =death$Age, time2 = death$time_years, event = death$respi_death)
+
+coxph <- coxph(LTRC_ats ~ AO.fev1fvc + Sex + Ethnicity + bmi + Smoking_status +Smoking_pack_yrs + Townsend_deprivation_index + 
+                                UKB_centre, data = death)
+summary(coxph)
+
+t2 <- coxph %>% tbl_regression(exponentiate= TRUE) %>% bold_p(t = 0.05) 
+
+#Cardiovascular mortality
+LTRC_ats <- Surv(time =death$Age, time2 = death$time_years, event = death$cardio_death)
+
+coxph <- coxph(LTRC_ats ~ AO.fev1fvc + Sex + Ethnicity + bmi + Smoking_status +Smoking_pack_yrs + Townsend_deprivation_index + 
+                                UKB_centre, data = death)
+summary(coxph)
+
+t3 <- coxph %>% tbl_regression(exponentiate= TRUE) %>% bold_p(t = 0.05) 
+
+
+#Cancer mortality
+LTRC_ats<- Surv(time =death$Age, time2 = death$time_years, event = death$cancer_death)
+
+coxph <- coxph(LTRC_ats ~ AO.fev1fvc + Sex + Ethnicity + bmi + Smoking_status +Smoking_pack_yrs + Townsend_deprivation_index + 
+                                UKB_centre, data = death)
+summary(coxph)
+
+t4 <- coxph %>% tbl_regression(exponentiate= TRUE) %>% bold_p(t = 0.05) 
+
+
+tbl_merge_ex2 <-
+  tbl_merge(
+    tbls = list(t1, t2, t3, t4),
+    tab_spanner = c("**All-cause mortality**", "**Respiratory mortality**",
+                    "**Cardiovascular mortality**", "**Cancer mortality**")
+  )
+
+tbl_merge_ex2 %>%
+  as_flex_table() %>%
+  flextable::save_as_docx(path = "NAMEs.docx")
+```

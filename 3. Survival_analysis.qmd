@@ -1,0 +1,73 @@
+---
+title: "3. Survival_analysis"
+author: "Valentina Quintero Santofimio"
+format: html
+editor: visual
+---
+
+
+
+
+
+
+
+
+
+
+---
+title: "3. Data Curation Survival_analysis"
+author: "Valentina Quintero Santofimio"
+format: html
+editor: visual
+---
+
+# 3. Survival Analysis 
+
+The Surv() function from the {survival} package creates a survival object for use as the response in a model formula. This object is then use to calculate the survival time of our desired model. 
+
+## Univariable (unadjusted) model 
+
+```{r}
+#Survival analysis people with [disease] vs [no disease] 
+library(survival)
+library(survminer)
+library(ggplot2)
+library(gtsummary)
+
+#Build survival object for all cause mortality (this can be altered to different types of death- See 5. Extension)
+LTRC_ats <- Surv(time =death$Age, time2 = death$time_years, event = death$allcause_death)
+
+#Unadjusted for covariates
+fit1 <- survfit(LTRC_ats ~ AO.fev1fvc, data = death)
+
+summary(fit1)
+```
+
+## Multivariable (adjusted) model
+```{r}
+
+```
+
+# 4. Visualisation of results 
+Survival analysis results may be presented in different ways depending on the type of analysis. For instance, univariable (unadjusted) models may be presented in a Kaplan-Meier Curve, whereas multivariable (adjusted) models are presented in a table or a forest plot.
+
+## Kaplan-Meier Curve and Log-Rank test
+The Kaplan-Meier method is a widely used technique for estimating survival times and probabilities. The results are represented as a step function, with each step corresponding to an event occurrence. 
+
+To compare survival curves between different groups, the Log-rank test is commonly used This statistical test evaluates whether there are significant differences in survival distributions by comparing observed and expected event rates across groups.
+
+````{r}
+
+ggsurvplot(fit1,
+           pval = TRUE, conf.int = TRUE,
+           risk.table = TRUE,
+           risk.table.col = "strata", 
+           linetype = "strata", 
+           legend.title = "Status",
+           xlab="Time (Years)",
+           surv.median.line = "hv", 
+           ggtheme = theme_bw(), 
+           palette = c("#E7B800", "#2E9FDF"))
+
+```
+
