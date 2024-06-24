@@ -1,7 +1,10 @@
 ---
-title: "Chapter 2: Data Curation in survival analysis"
+title: "2. Data Curation Survival_analysis"
 author: "Valentina Quintero Santofimio"
-format: html
+format:
+  html:
+    include-in-header:
+      - file: github-corner.html
 editor: visual
 ---
 
@@ -9,16 +12,17 @@ editor: visual
 
 Throughout this project, we will use a synthetic version of the UK Biobank data. The UK Biobank is a large cohort data set composed of over 500,000 volunteers recruited across United Kingdom between 2006-2010. For this project, we will use data from 252,877 participants who have high quality lung function data to select participants with airflow obstruction (defined as FEV1/FVC \< LLN)
 
-## Essential variables
+## Essential Variables
 
-| **Event (death) variables** | **Description**                                                                                                                                                           | **Coding**                                     | **Outcome variable** | **Description**                                                                                                                                              | **Coding**                                         |
+| **Event (death) variables** | **Description**                                                                                                                                                           | **Coding**                                           | **Outcome variable** | **Description**                                                                                                                                              | **Coding**                                         |
 |------------|------------|------------|------------|------------|------------|
-| cofdmain                    | Main cause of death coded by International Classification of Disease v10 (ICD10) This variable will be used later in the course to stratify the analysis by type of death | 0 = No event (alive/censored) 1 = Event (dead) | AO.fev1fvc           | Airflow obstruction derived as: forced expiratory volume at 1 s/ forced vital capacity below the lower limit of normal (from NHANES equations) (FEV1/FVCLLN) | 0 = No airflow obstruction 1 = Airflow obstruction |
+| cofdmain                    | Main cause of death coded by International Classification of Disease v10 (ICD10) This variable will be used later in the course to stratify the analysis by type of death | 0 = No event (alive/censored) 1 = Event (dead)       | AO.fev1fvc           | Airflow obstruction derived as: forced expiratory volume at 1 s/ forced vital capacity below the lower limit of normal (from NHANES equations) (FEV1/FVCLLN) | 0 = No airflow obstruction 1 = Airflow obstruction |
+| Date of death               | Date of participant's death obtained from the National Death Registry                                                                                                     | As character but must be changed into numeric format |                      |                                                                                                                                                              |                                                    |
 
 ## Additional variables used in the multivariable (adjusted model)
 
 | Covariates name | Description                                                     | Coding                   |
-|---------------|---------------------|------------------------------------|
+|------------------|-------------------------------------|------------------|
 | eid             | Unique participant Identification Number for anonymised data    | Interger                 |
 | Age             | Age of participant at recruitment (when they entered the study) | Interger                 |
 | Sex             | Sex of participant                                              | Male, Female             |
@@ -33,7 +37,7 @@ Note: the Surv() function (next chapter) in the {survival} package accepts diffe
 
 Please make sure that the event is properly formatted. **In this example we will be using 0/1**
 
-```{r}
+```{r, cache=TRUE}
 # Load Data set 
 
 death <- read.table("data/synthetic_data_ReCoDe.txt", header=TRUE, sep="\t")
@@ -53,12 +57,18 @@ death$monthofbirth[death$monthofbirth == "October"] <- "10"
 death$monthofbirth[death$monthofbirth == "November"] <- "11"
 death$monthofbirth[death$monthofbirth == "December"] <- "12"
 
-#Format of year XXXX- MonthXX- day XX 
+#Format of year XXXX- MonthXX- day XX (As a date)
 death$dateofbirth <- paste0(death$yearofbirth,"-", death$monthofbirth, "-01")
 death$dateofbirth <- as.Date(death$dateofbirth)
 death$date_of_death <- as.Date(death$date_of_death)
 death$now_cens <- as.Date("2023-01-01") #Change to "end of study" censoring date
+```
 
+Now that the dates are formatted, we need to calculate the difference between start and end dates in some units, in this example the time will be calculated in years.
+
+As participants could enter the study at any point between 2006-2010, there is a delayed entry into the study. We therefore use age as the time-scale to account for this.
+
+```{r, cache=TRUE}
 death$timetoevent <- death$date_of_death - death$dateofbirth 
 death$timetocens <- death$now_cens - death$dateofbirth 
 
@@ -103,6 +113,29 @@ summary_table <- death %>%
   mutate(Total = Male + Female)
 
 # Display the summary table
-kable(summary_table, caption = "Count of All-Cause Death by Sex")
+kable(summary_table, caption = "Number of participants that have died by sex")
+
+```
+
+## How many participants have airflow obstruction (outcome)?
+
+```{r}
+library(dplyr)
+library(tidyr)
+library(knitr)
+
+summary_table <- death %>%
+  group_by(Sex, AO.fev1fvc) %>%
+  summarise(count = n(), .groups = 'drop') %>%
+  pivot_wider(names_from = Sex, values_from = count, values_fill = list(count = 0)) %>%
+  mutate(Total = Male + Female)
+
+# Display the summary table
+kable(summary_table, caption = "Number of participants with airflow obstruction by sex")
+
+```
+
+```{r, cache=TRUE}
+save(death, file = "result.RData")
 
 ```
