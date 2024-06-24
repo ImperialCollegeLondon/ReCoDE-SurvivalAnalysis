@@ -1,5 +1,5 @@
 ---
-title: "2. Data Curation Survival_analysis"
+title: "Chapter 2: Data Curation in survival analysis"
 author: "Valentina Quintero Santofimio"
 format: html
 editor: visual
@@ -12,13 +12,13 @@ Throughout this project, we will use a synthetic version of the UK Biobank data.
 ## Essential variables
 
 | **Event (death) variables** | **Description**                                                                                                                                                           | **Coding**                                     | **Outcome variable** | **Description**                                                                                                                                              | **Coding**                                         |
-|-----------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------|----------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------|
+|------------|------------|------------|------------|------------|------------|
 | cofdmain                    | Main cause of death coded by International Classification of Disease v10 (ICD10) This variable will be used later in the course to stratify the analysis by type of death | 0 = No event (alive/censored) 1 = Event (dead) | AO.fev1fvc           | Airflow obstruction derived as: forced expiratory volume at 1 s/ forced vital capacity below the lower limit of normal (from NHANES equations) (FEV1/FVCLLN) | 0 = No airflow obstruction 1 = Airflow obstruction |
 
 ## Additional variables used in the multivariable (adjusted model)
 
 | Covariates name | Description                                                     | Coding                   |
-|-----------------|-----------------------------------------------------------------|--------------------------|
+|---------------|---------------------|------------------------------------|
 | eid             | Unique participant Identification Number for anonymised data    | Interger                 |
 | Age             | Age of participant at recruitment (when they entered the study) | Interger                 |
 | Sex             | Sex of participant                                              | Male, Female             |
