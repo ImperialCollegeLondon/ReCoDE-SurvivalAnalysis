@@ -1,31 +1,17 @@
 ---
-title: "3. Survival_analysis"
+title: "Chapters 3 and 4: Survival analysis"
 author: "Valentina Quintero Santofimio"
 format: html
 editor: visual
 ---
 
 
+# Conducting a Survival Analysis
+Using the previous data set we curated, we can now conduct the survival analysis. The Surv() function from the {survival} package creates a survival object for use as the response in a model formula. This object is then use to calculate the survival time of our desired model.
 
+## Univariable (unadjusted) model
 
-
-
-
-
-
-
----
-title: "3. Data Curation Survival_analysis"
-author: "Valentina Quintero Santofimio"
-format: html
-editor: visual
----
-
-# 3. Survival Analysis 
-
-The Surv() function from the {survival} package creates a survival object for use as the response in a model formula. This object is then use to calculate the survival time of our desired model. 
-
-## Univariable (unadjusted) model 
+Build survival object for all cause mortality, (this can be altered to different types of death- See 5. Extension)
 
 ```{r}
 #Survival analysis people with [disease] vs [no disease] 
@@ -33,41 +19,224 @@ library(survival)
 library(survminer)
 library(ggplot2)
 library(gtsummary)
+library(knitr)
+library(dplyr)
 
-#Build survival object for all cause mortality (this can be altered to different types of death- See 5. Extension)
+load("data/result.RData")
+death$allcause_death <- as.numeric(death$allcause_death)
+
+Surv(death$time_years, death$allcause_death)[1:10]
+```
+
+From this we can see that only the first person experienced the event at 67.56 years, the rest, as indicated by the “+” have not experienced the event and therefore are said to be censored.
+
+## Note: Possible Error
+```{r}
+#Surv(death$time_years, death$allcause_death): Invalid status value, must be logical or numeric. If this error appears, simply convert to numeric
+
+#death$allcause_death <- as.numeric(death$allcause_death)
+```
+
+## Creating survival curves
+Let’s use the survfit() function to create the survival curves for the entire cohort using the Kaplan-Meier method.In this example we defined the outcome as 0/1 for airflow obstruction.
+
+```{r}
 LTRC_ats <- Surv(time =death$Age, time2 = death$time_years, event = death$allcause_death)
 
 #Unadjusted for covariates
 fit1 <- survfit(LTRC_ats ~ AO.fev1fvc, data = death)
+summary_fit1 <- summary(fit1)
 
-summary(fit1)
+time <- summary_fit1$time
+n_risk <- summary_fit1$n.risk
+surv <- summary_fit1$surv
+lower_ci <- summary_fit1$lower
+upper_ci <- summary_fit1$upper
+
+# Display the first few rows of these components
+result <- data.frame(
+  Time = time[1:10],
+  N_Risk = n_risk[1:10],
+  Survival = surv[1:10],
+  Lower_CI = lower_ci[1:10],
+  Upper_CI = upper_ci[1:10]
+)
+
+print(result)
 ```
 
-## Multivariable (adjusted) model
-```{r}
-
-```
-
-# 4. Visualisation of results 
-Survival analysis results may be presented in different ways depending on the type of analysis. For instance, univariable (unadjusted) models may be presented in a Kaplan-Meier Curve, whereas multivariable (adjusted) models are presented in a table or a forest plot.
-
-## Kaplan-Meier Curve and Log-Rank test
-The Kaplan-Meier method is a widely used technique for estimating survival times and probabilities. The results are represented as a step function, with each step corresponding to an event occurrence. 
+## Visualisation of results
+Survival analysis results may be presented in different ways depending on the type of analysis. For instance, univariate (unadjusted) models may be presented in a Kaplan-Meier Curve, ## Kaplan-Meier Curve and Log-Rank test The Kaplan-Meier method is a widely used technique for estimating survival times and probabilities. The results are represented as a step function, with each step corresponding to an event occurrence.
 
 To compare survival curves between different groups, the Log-rank test is commonly used This statistical test evaluates whether there are significant differences in survival distributions by comparing observed and expected event rates across groups.
 
-````{r}
+```{r}
+#Plotting the results 
 
-ggsurvplot(fit1,
-           pval = TRUE, conf.int = TRUE,
-           risk.table = TRUE,
-           risk.table.col = "strata", 
-           linetype = "strata", 
-           legend.title = "Status",
-           xlab="Time (Years)",
-           surv.median.line = "hv", 
-           ggtheme = theme_bw(), 
-           palette = c("#E7B800", "#2E9FDF"))
+km_plot <- ggsurvplot(
+  fit1, 
+  data = death, 
+  conf.int = TRUE,
+  risk.table = TRUE,
+  ggtheme = theme_minimal(),
+  title = "Kaplan-Meier Survival Curve",
+  xlab = "Time in Years",
+  ylab = "Survival Probability",
+  legend.labs = c("No Airflow Obstruction", "Airflow Obstruction"),#Change stata
+  xlim = c(40, max(fit1$time)),  # Set x-axis limits (start at 40 min age)
+  risk.table.fontsize = 3,  # Adjust the font size for the risk table numbers
+  tables.theme = theme_survminer(
+    font.main = 8, 
+    font.submain = 8, 
+    font.caption = 8, 
+    font.x = 8, 
+    font.y = 8, 
+    font.tickslab = 8
+  )
+)
+
+print(km_plot)
+```
+
+## Calculate median survival time
+```{r}
+summary_fit1 <- summary(fit1)
+# Extract key summary statistics
+summary_table <- data.frame(
+  time = summary_fit1$time,
+  n.risk = summary_fit1$n.risk,
+  n.event = summary_fit1$n.event,
+  survival = summary_fit1$surv,
+  std.error = summary_fit1$std.err,
+  lower.ci = summary_fit1$lower,
+  upper.ci = summary_fit1$upper
+)
+
+# Display the summary table
+kable(summary_table[1:15, ], caption = "Summary of Survival Fit for AO.fev1fvc")
+```
+
+## Log Rank Test
+```{r}
+# Create the survival object for right-censored data
+right_censored_surv <- Surv(time = death$time_years, event = death$allcause_death)
+
+# Fit the survival model
+fit2 <- survfit(right_censored_surv ~ AO.fev1fvc, data = death)
+
+# Perform log-rank test
+log_rank_test <- survdiff(right_censored_surv ~ AO.fev1fvc, data = death)
+
+#Log-rank test results 
+
+print(log_rank_test)
+```
+
+# Multivariate (adjusted) model
+Multivariate (adjusted) models are presented in a table or a forest plot.
+
+```{r}
+#Survival analysis people with SAO vs no SAO 
+library(survival)
+library(survminer)
+library(ggplot2)
+library(gtsummary)
+
+#Order smoking status correctly
+death$Smoking_status <- as.factor(death$Smoking_status)
+death$Smoking_status <- relevel(death$Smoking_status, ref = "Never")
+
+#All cause mortality adjusted for covariates
+LTRC_ats <- Surv(time =death$Age, time2 = death$time_years, event = death$allcause_death)
+
+coxph_LTRC_airflow <- coxph(LTRC_ats ~ AO.fev1fvc + Sex + bmi + Ethnicity + Smoking_status + UKB_centre, data = death)
+
+
+summary(coxph_LTRC_airflow)
+```
+
+## Export results in a table
+From the summary results, we can export the results in a table, where exp(coef) corresponds to the Hazard Ratio (HR)
+
+
+```{r}
+coxph_LTRC_airflow %>%
+  tbl_regression(exponentiate = TRUE) %>%
+  bold_p(t = 0.05) %>%
+  modify_table_styling(
+    columns = "label",
+    rows = variable == "AO.fev1fvc",
+    label = "Airflow obstruction"
+  )
+
+#Save table as docx
+#flex_tbl <- as_flex_table(tb1)
+# Save as Word document
+#read_docx() %>%
+#  body_add_flextable(value = flex_tbl) %>%
+#  print(target = "allcause_mortality.docx")
+```
+
+## Present results in a forest plot
+
+The results from the Cox Proportional Hazard model may also be presented in a graphical manner using a forest plot
+
+### Forest plot with all variables that were included in the model
+
+```{r, echo = FALSE, fig.height = 28, fig.width = 20}
+ggforest(coxph_LTRC_airflow, data = death, fontsize = 1, main = "Forest Plot for Cox Proportional Hazards Model")
 
 ```
 
+
+### Forest plot selecting variables we want to present
+
+```{r}
+# Extract the coefficients and confidence intervals
+coefs <- summary(coxph_LTRC_airflow)$coefficients
+confint <- summary(coxph_LTRC_airflow)$conf.int
+
+# Exclude UKB_centre variables
+exclude_indices <- grepl("UKB_centre", rownames(coefs))
+coefs <- coefs[!exclude_indices, ]
+confint <- confint[!exclude_indices, ]
+
+# Create a dataframe for plotting
+forest_data <- data.frame(
+    Variable = rownames(coefs),
+    HR = coefs[, "exp(coef)"],
+    LowerCI = confint[, "lower .95"],
+    UpperCI = confint[, "upper .95"]
+)
+
+# Rename the specific variable
+forest_data$Variable <- ifelse(forest_data$Variable == "AO.fev1fvc", "Airflow obstruction", forest_data$Variable)
+
+# Optionally, clean up other variable names for better readability
+forest_data$Variable <- gsub("Smoking_status", "Smoking status", forest_data$Variable)
+
+# Create the forest plot
+forest_plot <- ggplot(forest_data, aes(x = HR, y = reorder(Variable, HR))) +
+    geom_point() +
+    geom_errorbarh(aes(xmin = LowerCI, xmax = UpperCI), height = 0.2) +
+    geom_vline(xintercept = 1, linetype = "dashed") +
+    labs(title = "Forest Plot for Cox Proportional Hazards Model",
+         x = "Hazard Ratio",
+         y = "Variables") +
+    theme_minimal()
+
+# Display the plot
+print(forest_plot)
+
+```
+
+## Interpretation of results
+From these results, we can conclude that:
+
+- Participants with airflow obstruction have significantly increased all cause mortality risk compared to participants without airflow obstruction (HR = 1.66, 95% CI = 1.58, 1.74)
+
+- The risk is 1.45 times higher in males compared to females
+
+- The risk is 2.37 times higher among current smokers and 1.19 times among previous smokers compared to never smokers
+
+- Model is adjusted for age (as used as the time scale), sex, smoking status, BMI, Ethnicity and UK Biobank Centre
