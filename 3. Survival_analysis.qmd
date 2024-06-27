@@ -40,7 +40,7 @@ From this we can see that only the first person experienced the event at 67.56 y
 
 ## Creating survival curves
 
-Let's use the survfit() function to create the survival curves for the entire cohort using the Kaplan-Meier method.In this example we defined the outcome as 0/1 for airflow obstruction.
+Let's use the `survfit()` function to create the survival curves for the entire cohort using the Kaplan-Meier method. In this example we defined the outcome as 0/1 for airflow obstruction.
 
 ```{r}
 #| warning: false
