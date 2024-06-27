@@ -5,8 +5,8 @@ format: html
 editor: visual
 ---
 
-
 # Conducting a Survival Analysis
+
 Using the previous data set we curated, we can now conduct the survival analysis. The Surv() function from the {survival} package creates a survival object for use as the response in a model formula. This object is then use to calculate the survival time of our desired model.
 
 ## Univariable (unadjusted) model
@@ -28,9 +28,10 @@ death$allcause_death <- as.numeric(death$allcause_death)
 Surv(death$time_years, death$allcause_death)[1:10]
 ```
 
-From this we can see that only the first person experienced the event at 67.56 years, the rest, as indicated by the “+” have not experienced the event and therefore are said to be censored.
+From this we can see that only the first person experienced the event at 67.56 years, the rest, as indicated by the "+" have not experienced the event and therefore are said to be censored.
 
 ## Note: Possible Error
+
 ```{r}
 #Surv(death$time_years, death$allcause_death): Invalid status value, must be logical or numeric. If this error appears, simply convert to numeric
 
@@ -38,7 +39,8 @@ From this we can see that only the first person experienced the event at 67.56 y
 ```
 
 ## Creating survival curves
-Let’s use the survfit() function to create the survival curves for the entire cohort using the Kaplan-Meier method.In this example we defined the outcome as 0/1 for airflow obstruction.
+
+Let's use the survfit() function to create the survival curves for the entire cohort using the Kaplan-Meier method.In this example we defined the outcome as 0/1 for airflow obstruction.
 
 ```{r}
 LTRC_ats <- Surv(time =death$Age, time2 = death$time_years, event = death$allcause_death)
@@ -66,7 +68,8 @@ print(result)
 ```
 
 ## Visualisation of results
-Survival analysis results may be presented in different ways depending on the type of analysis. For instance, univariate (unadjusted) models may be presented in a Kaplan-Meier Curve, ## Kaplan-Meier Curve and Log-Rank test The Kaplan-Meier method is a widely used technique for estimating survival times and probabilities. The results are represented as a step function, with each step corresponding to an event occurrence.
+
+Survival analysis results may be presented in different ways depending on the type of analysis. For instance, univariate (unadjusted) models may be presented in a Kaplan-Meier Curve, \## Kaplan-Meier Curve and Log-Rank test The Kaplan-Meier method is a widely used technique for estimating survival times and probabilities. The results are represented as a step function, with each step corresponding to an event occurrence.
 
 To compare survival curves between different groups, the Log-rank test is commonly used This statistical test evaluates whether there are significant differences in survival distributions by comparing observed and expected event rates across groups.
 
@@ -99,6 +102,7 @@ print(km_plot)
 ```
 
 ## Calculate median survival time
+
 ```{r}
 summary_fit1 <- summary(fit1)
 # Extract key summary statistics
@@ -117,6 +121,7 @@ kable(summary_table[1:15, ], caption = "Summary of Survival Fit for AO.fev1fvc")
 ```
 
 ## Log Rank Test
+
 ```{r}
 # Create the survival object for right-censored data
 right_censored_surv <- Surv(time = death$time_years, event = death$allcause_death)
@@ -133,6 +138,7 @@ print(log_rank_test)
 ```
 
 # Multivariate (adjusted) model
+
 Multivariate (adjusted) models are presented in a table or a forest plot.
 
 ```{r}
@@ -156,8 +162,8 @@ summary(coxph_LTRC_airflow)
 ```
 
 ## Export results in a table
-From the summary results, we can export the results in a table, where exp(coef) corresponds to the Hazard Ratio (HR)
 
+From the summary results, we can export the results in a table, where exp(coef) corresponds to the Hazard Ratio (HR)
 
 ```{r}
 coxph_LTRC_airflow %>%
@@ -187,7 +193,6 @@ The results from the Cox Proportional Hazard model may also be presented in a gr
 ggforest(coxph_LTRC_airflow, data = death, fontsize = 1, main = "Forest Plot for Cox Proportional Hazards Model")
 
 ```
-
 
 ### Forest plot selecting variables we want to present
 
@@ -231,12 +236,13 @@ print(forest_plot)
 ```
 
 ## Interpretation of results
+
 From these results, we can conclude that:
 
-- Participants with airflow obstruction have significantly increased all cause mortality risk compared to participants without airflow obstruction (HR = 1.66, 95% CI = 1.58, 1.74)
+-   Participants with airflow obstruction have significantly increased all cause mortality risk compared to participants without airflow obstruction (HR = 1.66, 95% CI = 1.58, 1.74)
 
-- The risk is 1.45 times higher in males compared to females
+-   The risk is 1.45 times higher in males compared to females
 
-- The risk is 2.37 times higher among current smokers and 1.19 times among previous smokers compared to never smokers
+-   The risk is 2.37 times higher among current smokers and 1.19 times among previous smokers compared to never smokers
 
-- Model is adjusted for age (as used as the time scale), sex, smoking status, BMI, Ethnicity and UK Biobank Centre
+-   Model is adjusted for age (as used as the time scale), sex, smoking status, BMI, Ethnicity and UK Biobank Centre
