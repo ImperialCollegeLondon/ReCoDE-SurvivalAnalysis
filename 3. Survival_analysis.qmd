@@ -73,7 +73,7 @@ print(result)
 
 Survival analysis results may be presented in different ways depending on the type of analysis. For instance, univariate (unadjusted) models may be presented in a Kaplan-Meier Curve, \## Kaplan-Meier Curve and Log-Rank test The Kaplan-Meier method is a widely used technique for estimating survival times and probabilities. The results are represented as a step function, with each step corresponding to an event occurrence.
 
-To compare survival curves between different groups, the Log-rank test is commonly used This statistical test evaluates whether there are significant differences in survival distributions by comparing observed and expected event rates across groups.
+To compare survival curves between different groups, the Log-rank test is commonly used. This statistical test evaluates whether there are significant differences in survival distributions by comparing observed and expected event rates across groups.
 
 ```{r}
 #Plotting the results 
