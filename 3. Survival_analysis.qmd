@@ -7,7 +7,7 @@ editor: visual
 
 # Conducting a Survival Analysis
 
-Using the previous data set we curated, we can now conduct the survival analysis. The Surv() function from the {survival} package creates a survival object for use as the response in a model formula. This object is then use to calculate the survival time of our desired model.
+Using the previous data set we curated, we can now conduct the survival analysis. The `Surv()` function from the `{survival}` package creates a survival object for use as the response in a model formula. This object is then used to calculate the survival time of our desired model.
 
 ## Univariable (unadjusted) model
 
