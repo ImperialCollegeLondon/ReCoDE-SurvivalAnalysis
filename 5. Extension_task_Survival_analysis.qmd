@@ -145,11 +145,14 @@ tbl_merge_ex2
 
 # Extra Resources
 Here are some extra bits and pieces to help you with this ReCoDE project including: 
-- R Packages Cheatsheet if you want to fancier with your tables and graphs
 
-[Survminer](help/survminer_cheatsheet.pdf){width=100%}
-[gtsummary](help/gtsummary_cheatsheet.pdf){width=100%}
+#### R Packages Cheatsheet if you want to get fancier with your tables and graphs
+
+- [Survminer Cheatsheet](help/survminer_cheatsheet.pdf){width=100%}
+- [gtsummary Cheatsheet](help/gtsummary_cheatsheet.pdf){width=100%}
 
 
-- Statistics glossary 
+#### Statistics glossary 
+
+- [Stats definitions](help/stats_glossary.pdf)
 

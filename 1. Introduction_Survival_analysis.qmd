@@ -74,4 +74,8 @@ There is an example using the UK Biobank data which gives you an insight into ho
 
 [NTUN Lecture: Introduction to R](https://www.math.ntnu.no/emner/ST2304/2020v/RIntro/Introduction_to_R.pdf)
 
+[Survival Analysis Textbook](http://www.uop.edu.pk/ocontents/survival-analysis-self-learning-book.pdf)
+
+[Advanced Survival Analysis Blog](https://www.emilyzabor.com/tutorials/survival_analysis_in_r_tutorial.html#Conditional_survival)
+
 ![You can do this!](page1.jpg)

@@ -43,6 +43,8 @@ From this we can see that only the first person experienced the event at 67.56 y
 Let's use the survfit() function to create the survival curves for the entire cohort using the Kaplan-Meier method.In this example we defined the outcome as 0/1 for airflow obstruction.
 
 ```{r}
+#| warning: false
+
 LTRC_ats <- Surv(time =death$Age, time2 = death$time_years, event = death$allcause_death)
 
 #Unadjusted for covariates
@@ -123,6 +125,7 @@ kable(summary_table[1:15, ], caption = "Summary of Survival Fit for AO.fev1fvc")
 ## Log Rank Test
 
 ```{r}
+#| warning: false
 # Create the survival object for right-censored data
 right_censored_surv <- Surv(time = death$time_years, event = death$allcause_death)
 
@@ -142,6 +145,7 @@ print(log_rank_test)
 Multivariate (adjusted) models are presented in a table or a forest plot.
 
 ```{r}
+#| warning: false
 #Survival analysis people with SAO vs no SAO 
 library(survival)
 library(survminer)
