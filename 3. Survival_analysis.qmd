@@ -167,7 +167,7 @@ summary(coxph_LTRC_airflow)
 
 ## Export results in a table
 
-From the summary results, we can export the results in a table, where exp(coef) corresponds to the Hazard Ratio (HR)
+From the summary results, we can export the results in a table, where `exp(coef)` corresponds to the Hazard Ratio (HR)
 
 ```{r}
 coxph_LTRC_airflow %>%
