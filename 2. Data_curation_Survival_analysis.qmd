@@ -33,7 +33,7 @@ Throughout this project, we will use a synthetic version of the UK Biobank data.
 
 # 2. Data Curation
 
-Note: the Surv() function (next chapter) in the {survival} package accepts different formatting of the event date e.g. TRUE/FALSE, where TRUE is event and FALSE is censored; 1/0 where 1 is event and 0 is censored; or 2/1 where 2 is event and 1 is censored.
+Note: the `Surv()` function (next chapter) in the `{survival}` package accepts different formatting of the event date e.g. `TRUE/FALSE`, where `TRUE` is event and `FALSE` is censored; `1/0` where `1` is event and `0` is censored; or `2/1` where `2` is event and `1` is censored.
 
 Please make sure that the event is properly formatted. **In this example we will be using 0/1**
 
