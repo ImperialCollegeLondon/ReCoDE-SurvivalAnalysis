@@ -1,124 +1,155 @@
 ---
-title: "5. Extension_task_Survival_analysis"
+title: "Chapter 5 Extension task"
 author: "Valentina Quintero Santofimio"
 format: html
 editor: visual
 ---
-# 5. Extension task
 
-## Survival analysis stratified by cause of death
-#### Arrange mortality data by types of death and all cause mortality ICD codes  
+# Survival analysis stratified by cause of death 
+
+A survival analysis using all-cause mortality is informative for us to know that a disease, treatment or characteristic may increase the risk of someone dying. However, it is useful to have a better understanding on what may be driving the high mortality risk. Conducting a survival analysis stratifying by cause of death is a common approach. 
+
+Mortality data is often coded using International Disease Classification codes v.10 (ICD-10). There are multiple categories for types of death, but for simplicity here are some examples, which we would be using in this project. 
+
+| Cause of Death  	| ICD-10 Code 	| Description 	|
+|---	|---	|---	|
+| Natural Causes 	| R99 	| Death due to natural processes such as aging or disease without specific cause specified. 	|
+| Cardiovascular Diseases 	| I00-I99 	| Diseases of the circulatory system such as heart attack and strokes 	|
+| Respiratory Diseases 	| J00-J99 	| Respiratory conditions such as pneumonia, COPD, asthma 	|
+| Neoplasm (cancer) 	| C00-D48 	| Death due to any type of cancers categorised by organ or tissue affected 	|
+| External Causes 	| V01-Y89 	| Death due to unintentional causes such as accidents or drowning  	|
+
+More info on [International Classification of Disease V.10](https://icd.who.int/browse10/2019/en)
+
+## Arrange mortality data by types of death using ICD codes
+#### Note: Remember to remove external cause of death if present in your data. In this example there are no external causes of death, however the code to remove it has been added as a comment below
+
 ```{r}
-#Using same data set as above 
+load("data/result.RData")
 
-#Classify type of death according to International Classificaiton of Disease Code (ICD-10)
-library(plyr)
+library(dplyr)
 
-#ICD10 codes from I05-I89
-cardiovascular <- death %>%
-  filter(str_detect(cofdm, "I"))
+# Define the ICD-10 code ranges for each category
+cardiovascular_codes <- c(paste0("I", 0:999))
+respiratory_codes <- c(paste0("J", 0:999))
+neoplasm_codes <- c(paste0("C", 0:99), paste0("D0", 0:99), paste0("D1", 0:99), paste0("D2", 0:99), paste0("D3", 0:99), paste0("D4", 0:99))
+#external_causes <- c(paste0("V", 0:99), paste0("W", 0:99), paste0("X", 0:99), paste0("Y", 0:99))
 
-tojoincardio <- data.frame(cardiovascular$eid, cardiovascular$cofdm)
-death <- join(death, tojoincardio, type="left", by="eid")
+# Create new variables for each category
+death2 <- death %>%
+  mutate(
+    cardiovascular_death = ifelse(cofdmain %in% cardiovascular_codes, 1, 0),
+    respiratory_death = ifelse(cofdmain %in% respiratory_codes, 1, 0),
+    neoplasm_death = ifelse(cofdmain %in% neoplasm_codes, 1, 0)#,
+    #external_cause_death = ifelse(cofdmain %in% external_causes, 1, 0)
+  )
 
-death$cardio_death <- ifelse(is.na(death$cardiovascular.cofdm), 0,1)
-
-#ICD10 codes from J00-J99
-respiratory <- death %>%
-  filter(str_detect(cofdm, "J"))
-
-tojoinrespi <- data.frame(respiratory$eid, respiratory$cofdm)
-death <- join(death, tojoinrespi, type="left", by="eid")
-
-death$respi_death <- ifelse(is.na(death$respiratory.cofdm), 0,1)
-
-
-#ICD10 codes from C00-C97 and D10-D48
-cancer <- death %>%
-  filter(str_detect(cofdm, "C|D10|D11|D12|D13|D14|D15|D16|D17|D18|D19|D20|D21|D22
-                    |D23|D24|D25|D26|D27|D28|D29|D30|D31|D32|D33|D34
-                    |D35|D36|D37|D38|D39|D40|D41|D42|D43|D44|D45|D46|D47|D48"))
-
-tojoincancer <- data.frame(cancer$eid, cancer$cofdm)
-death <- join(death, tojoincancer, type="left", by="eid")
-
-death$cancer_death <- ifelse(is.na(death$cancer.cofdm), 0,1)
+# Exclude external causes from the other categories
+#death2 <- death %>%
+ # mutate(
+  #  cardiovascular_death = ifelse(external_cause_death == 1, 0, cardiovascular_death),
+   # respiratory_death = ifelse(external_cause_death == 1, 0, respiratory_death),
+    #neoplasm_death = ifelse(external_cause_death == 1, 0, neoplasm_death)
+#  )
 
 ```
 
-## Data curation 
+## Censoring of the data using different types of death 
+
 ```{r}
+#| warning: false
 #Same as above but now with the different types of death 
 
 #Cardiovascular mortality 
-death$cardio_death <- as.character(death$cardio_death)
-death$cardio_death[is.na(death$cardio_death)] <- 0 #No event occured (ALIVE)
-death$cardio_death[death$cardio_death > 0] <- 1
+death2$cardiovascular_death <- as.character(death2$cardiovascular_death)
+death2$cardiovascular_death[is.na(death2$cardiovascular_death)] <- 0 #No event occured (ALIVE)
+death2$cardiovascular_death[death2$cardiovascular_death > 0] <- 1
+death2$cardiovascular_death <- as.numeric(death2$cardiovascular_death)
 
 #Respiratory mortality
-death$respi_death <- as.character(death$respi_death)
-death$respi_death[is.na(death$respi_death)] <- 0 #No event occured (ALIVE)
-death$respi_death[death$respi_death > 0] <- 1
+death2$respiratory_death <- as.character(death2$respiratory_death)
+death2$respiratory_death[is.na(death2$respiratory_death)] <- 0 #No event occured (ALIVE)
+death2$respiratory_death[death2$respiratory_death > 0] <- 1
+death2$respiratory_death <- as.numeric(death2$respiratory_death)
+
 
 #Neoplasm mortality
-death$cancer_death <- as.character(death$cancer_death)
-death$cancer_death[is.na(death$cancer_death)] <- 0 #No event occured (ALIVE)
-death$cancer_death[death$cancer_death > 0] <- 1
+death2$neoplasm_death <- as.character(death2$neoplasm_death)
+death2$neoplasm_death[is.na(death2$neoplasm_death)] <- 0 #No event occured (ALIVE)
+death2$neoplasm_death[death2$neoplasm_death > 0] <- 1
+death2$neoplasm_death <- as.numeric(death2$neoplasm_death)
+
+
+
 
 ```
 
-## Survival analysis (Multivariable) for all types of death 
+## Multivariate survival analysis, stratified by cause of death 
+
 ```{r}
+#| warning: false
+library(survival)
+library(survminer)
+library(ggplot2)
 library(gtsummary)
 
-LTRC_ats <- Surv(time =death$Age, time2 = death$time_years, event = death$allcause_death)
+#Order smoking status correctly
+death2$Smoking_status <- as.factor(death2$Smoking_status)
+death2$Smoking_status <- relevel(death2$Smoking_status, ref = "Never")
 
-coxph <- coxph(LTRC_ats ~ AO.fev1fvc + Sex + Ethnicity + bmi + Smoking_status +Smoking_pack_yrs + Townsend_deprivation_index + 
-                                UKB_centre, data = death)
-summary(coxph)
+#All cause mortality adjusted for covariates
 
-coxph %>% tbl_regression(exponentiate= TRUE) %>% bold_p(t = 0.05) 
+#E.g. Cardiovascular mortality 
 
+LTRC_ats <- Surv(time =death2$Age, time2 = death2$time_years, event = death2$cardiovascular_death) #Change type of death here 
+coxph_LTRC_airflow <- coxph(LTRC_ats ~ AO.fev1fvc + Sex + bmi + Ethnicity + Smoking_status + UKB_centre, data = death2)
 
-t1 <- coxph %>% tbl_regression(exponentiate= TRUE) %>% bold_p(t = 0.05) 
+coxph_LTRC_airflow %>% tbl_regression(exponentiate= TRUE) %>% bold_p(t = 0.05) 
+
+t1 <- coxph_LTRC_airflow %>% tbl_regression(exponentiate= TRUE) %>% bold_p(t = 0.05) 
+
+#summary(coxph_LTRC_airflow)
 
 #Respiratory mortality
-LTRC_ats<- Surv(time =death$Age, time2 = death$time_years, event = death$respi_death)
+LTRC_ats <- Surv(time =death2$Age, time2 = death2$time_years, event = death2$respiratory_death) #Change type of death here 
+coxph_LTRC_airflow <- coxph(LTRC_ats ~ AO.fev1fvc + Sex + bmi + Ethnicity + Smoking_status + UKB_centre, data = death2)
 
-coxph <- coxph(LTRC_ats ~ AO.fev1fvc + Sex + Ethnicity + bmi + Smoking_status +Smoking_pack_yrs + Townsend_deprivation_index + 
-                                UKB_centre, data = death)
-summary(coxph)
+coxph_LTRC_airflow %>% tbl_regression(exponentiate= TRUE) %>% bold_p(t = 0.05) 
 
-t2 <- coxph %>% tbl_regression(exponentiate= TRUE) %>% bold_p(t = 0.05) 
+t2 <- coxph_LTRC_airflow %>% tbl_regression(exponentiate= TRUE) %>% bold_p(t = 0.05) 
+#summary(coxph_LTRC_airflow)
 
-#Cardiovascular mortality
-LTRC_ats <- Surv(time =death$Age, time2 = death$time_years, event = death$cardio_death)
+#Respiratory mortality
+LTRC_ats <- Surv(time =death2$Age, time2 = death2$time_years, event = death2$neoplasm_death) #Change type of death here 
+coxph_LTRC_airflow <- coxph(LTRC_ats ~ AO.fev1fvc + Sex + bmi + Ethnicity + Smoking_status + UKB_centre, data = death2)
 
-coxph <- coxph(LTRC_ats ~ AO.fev1fvc + Sex + Ethnicity + bmi + Smoking_status +Smoking_pack_yrs + Townsend_deprivation_index + 
-                                UKB_centre, data = death)
-summary(coxph)
+coxph_LTRC_airflow %>% tbl_regression(exponentiate= TRUE) %>% bold_p(t = 0.05) 
 
-t3 <- coxph %>% tbl_regression(exponentiate= TRUE) %>% bold_p(t = 0.05) 
-
-
-#Cancer mortality
-LTRC_ats<- Surv(time =death$Age, time2 = death$time_years, event = death$cancer_death)
-
-coxph <- coxph(LTRC_ats ~ AO.fev1fvc + Sex + Ethnicity + bmi + Smoking_status +Smoking_pack_yrs + Townsend_deprivation_index + 
-                                UKB_centre, data = death)
-summary(coxph)
-
-t4 <- coxph %>% tbl_regression(exponentiate= TRUE) %>% bold_p(t = 0.05) 
+t3 <- coxph_LTRC_airflow %>% tbl_regression(exponentiate= TRUE) %>% bold_p(t = 0.05) 
+#summary(coxph_LTRC_airflow)
 
 
 tbl_merge_ex2 <-
   tbl_merge(
-    tbls = list(t1, t2, t3, t4),
-    tab_spanner = c("**All-cause mortality**", "**Respiratory mortality**",
-                    "**Cardiovascular mortality**", "**Cancer mortality**")
+    tbls = list(t1, t2, t3),
+    tab_spanner = c("**Cardiovascular mortality**",
+                    "**Respiratory mortality**", "**Neoplasm (cancer) mortality**")
   )
 
-tbl_merge_ex2 %>%
-  as_flex_table() %>%
-  flextable::save_as_docx(path = "NAMEs.docx")
+tbl_merge_ex2
+
+#tbl_merge_ex2 %>%
+ # as_flex_table() %>%
+  #flextable::save_as_docx(path = "NAMEs.docx")
 ```
+
+# Extra Resources
+Here are some extra bits and pieces to help you with this ReCoDE project including: 
+- R Packages Cheatsheet if you want to fancier with your tables and graphs
+
+[Survminer](help/survminer_cheatsheet.pdf){width=100%}
+[gtsummary](help/gtsummary_cheatsheet.pdf){width=100%}
+
+
+- Statistics glossary 
+
