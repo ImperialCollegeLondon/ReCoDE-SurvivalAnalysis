@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>ReCoDE Project</title>
+<title>license – ReCoDE Project</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -115,18 +115,8 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">On this page</h2>
-   
-  <ul>
-  <li><a href="#cracking-times-code-survival-analysis-of-large-datasets" id="toc-cracking-times-code-survival-analysis-of-large-datasets" class="nav-link active" data-scroll-target="#cracking-times-code-survival-analysis-of-large-datasets">Cracking time’s code: Survival analysis of large datasets</a>
-  <ul class="collapse">
-  <li><a href="#description-of-the-project" id="toc-description-of-the-project" class="nav-link" data-scroll-target="#description-of-the-project">Description of the project</a></li>
-  <li><a href="#learning-outcomes" id="toc-learning-outcomes" class="nav-link" data-scroll-target="#learning-outcomes">Learning Outcomes</a></li>
-  </ul></li>
-  </ul>
-</nav>
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+        
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -134,63 +124,17 @@ ul.task-list li input[type="checkbox"] {
 
 
 
-<section id="cracking-times-code-survival-analysis-of-large-datasets" class="level1">
-<h1>Cracking time’s code: Survival analysis of large datasets</h1>
-<section id="by-valentina-quintero-santofimio-imperial-college-london" class="level4">
-<h4 class="anchored" data-anchor-id="by-valentina-quintero-santofimio-imperial-college-london">By Valentina Quintero Santofimio, Imperial College London</h4>
-</section>
-<section id="description-of-the-project" class="level2">
-<h2 class="anchored" data-anchor-id="description-of-the-project">Description of the project</h2>
-<p>This is a special type of analysis that takes into consideration when the event occurred rather than if the event occurred. In other words, we are focused on acquiring the rate, which is the number of events per unit time. In this exemplar will introduce you to the concept of survival analysis (also known as a time-to-event analysis) using large data sets using R.</p>
+<p>BSD 3-Clause License</p>
+<p>Copyright (c) 2022, Imperial College London All rights reserved.</p>
+<p>Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:</p>
 <ol type="1">
-<li><p>Firstly, I will highlight the steps needed to effectively clean the data, including correct censoring of the participants.</p></li>
-<li><p>Secondly, I will demonstrate two approaches: a univariate and a multivariate Cox Proportional regression model (which allows the incorporation of confounders).</p></li>
-<li><p>Thirdly, we will be able to estimate the hazard ratio of an event occurring between two groups and present our findings in a Kaplan-Meier curve (univariate analysis) or in a table/forest plot (multivariate analysis).</p></li>
+<li><p>Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.</p></li>
+<li><p>Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.</p></li>
+<li><p>Neither the name of the copyright holder nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.</p></li>
 </ol>
-<p>This special type of analysis allows to calculate the risk of the event (disease, death, etc.) occurring at a given time (hazard ratio). A common timescale used in survival analysis is time-to-event, however in large cohort studies data may be left-truncated (participants entering the study at different time points), making the time-scale unsuitable. Instead, age should be considered as the timescale. This is most relevant when exploring age-dependent associations between exposures and outcomes. Therefore, it ensures accurate estimation of hazard risk and median survival times, preventing underestimation.</p>
-<section id="quick-summary" class="level4">
-<h4 class="anchored" data-anchor-id="quick-summary">Quick summary</h4>
-<p>In summary, survival analysis using large cohort data may be challenging and require comprehensive understanding of the data to ensure correct interpretation of the results.</p>
-</section>
-</section>
-<section id="learning-outcomes" class="level2">
-<h2 class="anchored" data-anchor-id="learning-outcomes">Learning Outcomes</h2>
-<ul>
-<li>Understand the different types of censoring and how to curate your data</li>
-<li>Conduct univariate and multivariate survival analysis using R</li>
-<li>Graphically present the findings of a survival analysis</li>
-<li>Interpret the results from a survival analysis</li>
-</ul>
-<table class="caption-top table">
-<thead>
-<tr class="header">
-<th>Task</th>
-<th>Time</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><a href="./introduction.html">Introduction</a></td>
-<td>2 hours</td>
-</tr>
-<tr class="even">
-<td><a href="./data_curation.html">Data curation</a></td>
-<td>2 hours</td>
-</tr>
-<tr class="odd">
-<td><a href="./survival_analysis.html">Survival analysis</a></td>
-<td>3 hours</td>
-</tr>
-<tr class="even">
-<td><a href="./extension.html">Extension task: Advanced survival analysis</a></td>
-<td>2 hours</td>
-</tr>
-</tbody>
-</table>
+<p>THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS “AS IS” AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</p>
 
 
-</section>
-</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

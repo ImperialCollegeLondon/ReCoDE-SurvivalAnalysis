@@ -1,0 +1,1854 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.5.53">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>survival_analysis – ReCoDE Project</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">ReCoDE Project</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="./introduction.html"> 
+<span class="menu-text">Introduction</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./data_curation.html"> 
+<span class="menu-text">Data curation</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link active" href="./survival_analysis.html" aria-current="page"> 
+<span class="menu-text">Survival Analysis</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./extension.html"> 
+<span class="menu-text">Advanced Survival Analysis</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#conducting-a-survival-analysis" id="toc-conducting-a-survival-analysis" class="nav-link active" data-scroll-target="#conducting-a-survival-analysis">Conducting a Survival Analysis</a>
+  <ul class="collapse">
+  <li><a href="#univariate-unadjusted-model" id="toc-univariate-unadjusted-model" class="nav-link" data-scroll-target="#univariate-unadjusted-model">Univariate (unadjusted) model</a></li>
+  <li><a href="#note-possible-error" id="toc-note-possible-error" class="nav-link" data-scroll-target="#note-possible-error">Note: Possible Error</a></li>
+  <li><a href="#creating-survival-curves" id="toc-creating-survival-curves" class="nav-link" data-scroll-target="#creating-survival-curves">Creating survival curves</a></li>
+  </ul></li>
+  <li><a href="#visualisation-of-results" id="toc-visualisation-of-results" class="nav-link" data-scroll-target="#visualisation-of-results">Visualisation of results</a>
+  <ul class="collapse">
+  <li><a href="#kaplan-meier-curve-and-log-rank-test" id="toc-kaplan-meier-curve-and-log-rank-test" class="nav-link" data-scroll-target="#kaplan-meier-curve-and-log-rank-test">Kaplan-Meier Curve and Log-Rank test</a></li>
+  <li><a href="#overview-of-the-survival-model" id="toc-overview-of-the-survival-model" class="nav-link" data-scroll-target="#overview-of-the-survival-model">Overview of the survival model</a></li>
+  <li><a href="#calculating-median-survival-time" id="toc-calculating-median-survival-time" class="nav-link" data-scroll-target="#calculating-median-survival-time">Calculating Median Survival time</a></li>
+  <li><a href="#log-rank-test" id="toc-log-rank-test" class="nav-link" data-scroll-target="#log-rank-test">Log Rank Test</a></li>
+  </ul></li>
+  <li><a href="#multivariate-adjusted-model" id="toc-multivariate-adjusted-model" class="nav-link" data-scroll-target="#multivariate-adjusted-model">Multivariate (adjusted) model</a>
+  <ul class="collapse">
+  <li><a href="#export-results-in-a-table" id="toc-export-results-in-a-table" class="nav-link" data-scroll-target="#export-results-in-a-table">Export results in a table</a></li>
+  <li><a href="#present-results-in-a-forest-plot" id="toc-present-results-in-a-forest-plot" class="nav-link" data-scroll-target="#present-results-in-a-forest-plot">Present results in a forest plot</a>
+  <ul class="collapse">
+  <li><a href="#forest-plot-with-all-variables-that-were-included-in-the-model" id="toc-forest-plot-with-all-variables-that-were-included-in-the-model" class="nav-link" data-scroll-target="#forest-plot-with-all-variables-that-were-included-in-the-model">Forest plot with all variables that were included in the model</a></li>
+  <li><a href="#forest-plot-selecting-variables-we-want-to-present" id="toc-forest-plot-selecting-variables-we-want-to-present" class="nav-link" data-scroll-target="#forest-plot-selecting-variables-we-want-to-present">Forest plot selecting variables we want to present</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#interpretation-of-results" id="toc-interpretation-of-results" class="nav-link" data-scroll-target="#interpretation-of-results">Interpretation of results</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+
+
+<section id="conducting-a-survival-analysis" class="level1">
+<h1>Conducting a Survival Analysis</h1>
+<p>Using the previous data set we curated, we can now conduct the survival analysis. The <code>Surv()</code> function from the <code>{survival}</code> package creates a survival object for use as the response in a model formula. This object is then used to calculate the survival time of our desired model.</p>
+<section id="univariate-unadjusted-model" class="level2">
+<h2 class="anchored" data-anchor-id="univariate-unadjusted-model">Univariate (unadjusted) model</h2>
+<p>Firstly, we must build a survival object for all cause mortality, (this can be altered to different types of death see <a href="./extension.html">Advanced Survival Analysis</a>).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Survival analysis people with [disease] vs [no disease] </span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(survival)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(survminer)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gtsummary)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(knitr)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="st">"data/result.RData"</span>)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>death<span class="sc">$</span>allcause_death <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(death<span class="sc">$</span>allcause_death)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="fu">Surv</span>(death<span class="sc">$</span>time_years, death<span class="sc">$</span>allcause_death)[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] 67.56742  58.25051+ 72.41889+ 64.75291+ 82.58453+ 65.41821+ 64.25188+
+ [8] 79.67146+ 81.50308+ 67.08556+</code></pre>
+</div>
+</div>
+<p>From this we can see that only the first person experienced the event at 67.56 years, the rest, as indicated by the “+” have not experienced the event and therefore are said to be censored.</p>
+</section>
+<section id="note-possible-error" class="level2">
+<h2 class="anchored" data-anchor-id="note-possible-error">Note: Possible Error</h2>
+<p>It is common that our code returns an error: “Invalid status value, must be logical or numeric”, if we have not specified the type of variable we want to store our all-cause mortality variable (status). This can be easily corrected with the code below.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Surv(death$time_years, death$allcause_death): Invalid status value, must be logical or numeric. If this error appears, simply convert to numeric</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co">#death$allcause_death &lt;- as.numeric(death$allcause_death)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="creating-survival-curves" class="level2">
+<h2 class="anchored" data-anchor-id="creating-survival-curves">Creating survival curves</h2>
+<p>Let’s now use the <code>survfit()</code> function to create the survival curves for the entire cohort using the Kaplan-Meier method. In this example we defined the outcome as 0/1 for airflow obstruction.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>LTRC_ats <span class="ot">&lt;-</span> <span class="fu">Surv</span>(<span class="at">time =</span>death<span class="sc">$</span>Age, <span class="at">time2 =</span> death<span class="sc">$</span>time_years, <span class="at">event =</span> death<span class="sc">$</span>allcause_death)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co">#Unadjusted for covariates</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>fit1 <span class="ot">&lt;-</span> <span class="fu">survfit</span>(LTRC_ats <span class="sc">~</span> AO.fev1fvc, <span class="at">data =</span> death)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>summary_fit1 <span class="ot">&lt;-</span> <span class="fu">summary</span>(fit1)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>time <span class="ot">&lt;-</span> summary_fit1<span class="sc">$</span>time</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>n_risk <span class="ot">&lt;-</span> summary_fit1<span class="sc">$</span>n.risk</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>surv <span class="ot">&lt;-</span> summary_fit1<span class="sc">$</span>surv</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>lower_ci <span class="ot">&lt;-</span> summary_fit1<span class="sc">$</span>lower</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>upper_ci <span class="ot">&lt;-</span> summary_fit1<span class="sc">$</span>upper</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the first few rows of these components</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">Time =</span> time[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>],</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">N_Risk =</span> n_risk[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>],</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">Survival =</span> surv[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>],</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">Lower_CI =</span> lower_ci[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>],</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">Upper_CI =</span> upper_ci[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>]</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(result)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       Time N_Risk  Survival  Lower_CI  Upper_CI
+1  40.29295   2471 0.9995953 0.9988026 1.0000000
+2  40.53388   2470 0.9991906 0.9980700 1.0000000
+3  40.78029   2469 0.9987859 0.9974139 1.0000000
+4  41.05955   7386 0.9986507 0.9972535 1.0000000
+5  41.23751   7385 0.9985155 0.9970936 0.9999394
+6  41.34428   7384 0.9983802 0.9969341 0.9998284
+7  41.34702   7383 0.9982450 0.9967751 0.9997171
+8  41.38809   7382 0.9981098 0.9966164 0.9996054
+9  41.39083   7381 0.9979746 0.9964581 0.9994933
+10 41.42642   7380 0.9978393 0.9963001 0.9993809</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="visualisation-of-results" class="level1">
+<h1>Visualisation of results</h1>
+<p>Survival analysis results may be presented in different ways depending on the type of analysis. For instance, univariate (unadjusted) models may be presented in a Kaplan-Meier Curve.</p>
+<section id="kaplan-meier-curve-and-log-rank-test" class="level2">
+<h2 class="anchored" data-anchor-id="kaplan-meier-curve-and-log-rank-test">Kaplan-Meier Curve and Log-Rank test</h2>
+<p>The Kaplan-Meier method is a widely used technique for estimating survival times and probabilities. The results are represented as a step function, with each step corresponding to an event occurrence.</p>
+<p>To compare survival curves between different groups, the Log-rank test is commonly used. This statistical test evaluates whether there are significant differences in survival distributions by comparing observed and expected event rates across groups.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Plotting the results </span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>km_plot <span class="ot">&lt;-</span> <span class="fu">ggsurvplot</span>(</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  fit1, </span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> death, </span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">conf.int =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">risk.table =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">ggtheme =</span> <span class="fu">theme_minimal</span>(),</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">title =</span> <span class="st">"Kaplan-Meier Survival Curve"</span>,</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlab =</span> <span class="st">"Time in Years"</span>,</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">ylab =</span> <span class="st">"Survival Probability"</span>,</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">legend.labs =</span> <span class="fu">c</span>(<span class="st">"No Airflow Obstruction"</span>, <span class="st">"Airflow Obstruction"</span>),<span class="co">#Change stata</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlim =</span> <span class="fu">c</span>(<span class="dv">40</span>, <span class="fu">max</span>(fit1<span class="sc">$</span>time)),  <span class="co"># Set x-axis limits (start at 40 min age)</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">risk.table.fontsize =</span> <span class="dv">3</span>,  <span class="co"># Adjust the font size for the risk table numbers</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">tables.theme =</span> <span class="fu">theme_survminer</span>(</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">font.main =</span> <span class="dv">8</span>, </span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">font.submain =</span> <span class="dv">8</span>, </span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">font.caption =</span> <span class="dv">8</span>, </span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">font.x =</span> <span class="dv">8</span>, </span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">font.y =</span> <span class="dv">8</span>, </span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">font.tickslab =</span> <span class="dv">8</span></span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(km_plot)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="survival_analysis_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="overview-of-the-survival-model" class="level2">
+<h2 class="anchored" data-anchor-id="overview-of-the-survival-model">Overview of the survival model</h2>
+<p>We can present an overview of the survival model in a table.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>summary_fit1 <span class="ot">&lt;-</span> <span class="fu">summary</span>(fit1)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract key summary statistics</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>summary_table <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">Time =</span> summary_fit1<span class="sc">$</span>time,</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">N.risk =</span> summary_fit1<span class="sc">$</span>n.risk,</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">N.event =</span> summary_fit1<span class="sc">$</span>n.event,</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">Survival =</span> summary_fit1<span class="sc">$</span>surv,</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">Standard.Error =</span> summary_fit1<span class="sc">$</span>std.err,</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">Lower.CI =</span> summary_fit1<span class="sc">$</span>lower,</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">Upper.CI =</span> summary_fit1<span class="sc">$</span>upper</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the summary table</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(summary_table[<span class="dv">1</span><span class="sc">:</span><span class="dv">15</span>, ], <span class="at">caption =</span> <span class="st">"Summary of Survival Fit for Airflow obstruction (AO.fev1fvc)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Summary of Survival Fit for Airflow obstruction (AO.fev1fvc)</caption>
+<colgroup>
+<col style="width: 13%">
+<col style="width: 10%">
+<col style="width: 11%">
+<col style="width: 14%">
+<col style="width: 21%">
+<col style="width: 14%">
+<col style="width: 14%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: right;">Time</th>
+<th style="text-align: right;">N.risk</th>
+<th style="text-align: right;">N.event</th>
+<th style="text-align: right;">Survival</th>
+<th style="text-align: right;">Standard.Error</th>
+<th style="text-align: right;">Lower.CI</th>
+<th style="text-align: right;">Upper.CI</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">40.29295</td>
+<td style="text-align: right;">2471</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0.9995953</td>
+<td style="text-align: right;">0.0004046</td>
+<td style="text-align: right;">0.9988026</td>
+<td style="text-align: right;">1.0000000</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">40.53388</td>
+<td style="text-align: right;">2470</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0.9991906</td>
+<td style="text-align: right;">0.0005721</td>
+<td style="text-align: right;">0.9980700</td>
+<td style="text-align: right;">1.0000000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">40.78029</td>
+<td style="text-align: right;">2469</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0.9987859</td>
+<td style="text-align: right;">0.0007005</td>
+<td style="text-align: right;">0.9974139</td>
+<td style="text-align: right;">1.0000000</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">41.05955</td>
+<td style="text-align: right;">7386</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0.9986507</td>
+<td style="text-align: right;">0.0007134</td>
+<td style="text-align: right;">0.9972535</td>
+<td style="text-align: right;">1.0000000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">41.23751</td>
+<td style="text-align: right;">7385</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0.9985155</td>
+<td style="text-align: right;">0.0007260</td>
+<td style="text-align: right;">0.9970936</td>
+<td style="text-align: right;">0.9999394</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">41.34428</td>
+<td style="text-align: right;">7384</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0.9983802</td>
+<td style="text-align: right;">0.0007384</td>
+<td style="text-align: right;">0.9969341</td>
+<td style="text-align: right;">0.9998284</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">41.34702</td>
+<td style="text-align: right;">7383</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0.9982450</td>
+<td style="text-align: right;">0.0007505</td>
+<td style="text-align: right;">0.9967751</td>
+<td style="text-align: right;">0.9997171</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">41.38809</td>
+<td style="text-align: right;">7382</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0.9981098</td>
+<td style="text-align: right;">0.0007625</td>
+<td style="text-align: right;">0.9966164</td>
+<td style="text-align: right;">0.9996054</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">41.39083</td>
+<td style="text-align: right;">7381</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0.9979746</td>
+<td style="text-align: right;">0.0007743</td>
+<td style="text-align: right;">0.9964581</td>
+<td style="text-align: right;">0.9994933</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">41.42642</td>
+<td style="text-align: right;">7380</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0.9978393</td>
+<td style="text-align: right;">0.0007859</td>
+<td style="text-align: right;">0.9963001</td>
+<td style="text-align: right;">0.9993809</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">41.43737</td>
+<td style="text-align: right;">7379</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0.9977041</td>
+<td style="text-align: right;">0.0007974</td>
+<td style="text-align: right;">0.9961425</td>
+<td style="text-align: right;">0.9992682</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">41.46201</td>
+<td style="text-align: right;">7378</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0.9975689</td>
+<td style="text-align: right;">0.0008087</td>
+<td style="text-align: right;">0.9959852</td>
+<td style="text-align: right;">0.9991551</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">41.61533</td>
+<td style="text-align: right;">7377</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0.9974336</td>
+<td style="text-align: right;">0.0008198</td>
+<td style="text-align: right;">0.9958282</td>
+<td style="text-align: right;">0.9990417</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">41.74675</td>
+<td style="text-align: right;">7376</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0.9972984</td>
+<td style="text-align: right;">0.0008307</td>
+<td style="text-align: right;">0.9956715</td>
+<td style="text-align: right;">0.9989280</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">41.80698</td>
+<td style="text-align: right;">7375</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0.9971632</td>
+<td style="text-align: right;">0.0008416</td>
+<td style="text-align: right;">0.9955151</td>
+<td style="text-align: right;">0.9988140</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="calculating-median-survival-time" class="level2">
+<h2 class="anchored" data-anchor-id="calculating-median-survival-time">Calculating Median Survival time</h2>
+<p>The median survival time is often reported in a survival analysis for each of the groups we are comparing.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>median_survival <span class="ot">&lt;-</span> fit1</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>median_survival</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Call: survfit(formula = LTRC_ats ~ AO.fev1fvc, data = death)
+
+   1325 observations deleted due to missingness 
+             records  n.max n.start events median 0.95LCL 0.95UCL
+AO.fev1fvc=0  229908 136318    2471  11251   86.5      NA      NA
+AO.fev1fvc=1   21644  13187     246   2164   85.7    85.6      NA</code></pre>
+</div>
+</div>
+<p>We can see that the median survival time for people without airflow obstruction is 86.5 years compared to 85.7 years in people with airflow obstruction. Meaning that people with AO live less than those without.</p>
+</section>
+<section id="log-rank-test" class="level2">
+<h2 class="anchored" data-anchor-id="log-rank-test">Log Rank Test</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create the survival object for right-censored data</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>right_censored_surv <span class="ot">&lt;-</span> <span class="fu">Surv</span>(<span class="at">time =</span> death<span class="sc">$</span>time_years, <span class="at">event =</span> death<span class="sc">$</span>allcause_death)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit the survival model</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>fit2 <span class="ot">&lt;-</span> <span class="fu">survfit</span>(right_censored_surv <span class="sc">~</span> AO.fev1fvc, <span class="at">data =</span> death)</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Perform log-rank test</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>log_rank_test <span class="ot">&lt;-</span> <span class="fu">survdiff</span>(right_censored_surv <span class="sc">~</span> AO.fev1fvc, <span class="at">data =</span> death)</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="co">#Log-rank test results </span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(log_rank_test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Call:
+survdiff(formula = right_censored_surv ~ AO.fev1fvc, data = death)
+
+                  N Observed Expected (O-E)^2/E (O-E)^2/V
+AO.fev1fvc=0 231027    12370    13399        79       869
+AO.fev1fvc=1  21850     2370     1341       790       869
+
+ Chisq= 869  on 1 degrees of freedom, p= &lt;2e-16 </code></pre>
+</div>
+</div>
+<p>A significant Log-Rank test results means that there are statistically significant differences between the two groups we are comparing (e.g.&nbsp;People with AO vs people without AO)</p>
+</section>
+</section>
+<section id="multivariate-adjusted-model" class="level1">
+<h1>Multivariate (adjusted) model</h1>
+<p>Multivariate (adjusted) models are used to account for confounders that may impact the associations between the exposure and the outcome. It is common to have complex models adjusting for multiple covariates, and therefore presenting these on a KM curve would be confusinve and not informative. Therefore, results from a multivatiate model are better presented in a table or a forest plot.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Survival analysis people with SAO vs no SAO </span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(survival)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(survminer)</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gtsummary)</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="co">#Order smoking status correctly</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>death<span class="sc">$</span>Smoking_status <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(death<span class="sc">$</span>Smoking_status)</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>death<span class="sc">$</span>Smoking_status <span class="ot">&lt;-</span> <span class="fu">relevel</span>(death<span class="sc">$</span>Smoking_status, <span class="at">ref =</span> <span class="st">"Never"</span>)</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a><span class="co">#All cause mortality adjusted for covariates</span></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>LTRC_ats <span class="ot">&lt;-</span> <span class="fu">Surv</span>(<span class="at">time =</span>death<span class="sc">$</span>Age, <span class="at">time2 =</span> death<span class="sc">$</span>time_years, <span class="at">event =</span> death<span class="sc">$</span>allcause_death)</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>coxph_LTRC_airflow <span class="ot">&lt;-</span> <span class="fu">coxph</span>(LTRC_ats <span class="sc">~</span> AO.fev1fvc <span class="sc">+</span> Sex <span class="sc">+</span> bmi <span class="sc">+</span> Ethnicity <span class="sc">+</span> Smoking_status <span class="sc">+</span> UKB_centre, <span class="at">data =</span> death)</span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(coxph_LTRC_airflow)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Call:
+coxph(formula = LTRC_ats ~ AO.fev1fvc + Sex + bmi + Ethnicity + 
+    Smoking_status + UKB_centre, data = death)
+
+  n= 251138, number of events= 13375 
+   (1739 observations deleted due to missingness)
+
+                              coef exp(coef)  se(coef)      z Pr(&gt;|z|)    
+AO.fev1fvc                0.505141  1.657220  0.024248 20.832  &lt; 2e-16 ***
+SexMale                   0.374856  1.454782  0.017578 21.326  &lt; 2e-16 ***
+bmi                       0.026416  1.026768  0.001781 14.834  &lt; 2e-16 ***
+EthnicityWhite           -0.060490  0.941303  0.035508 -1.704 0.088462 .  
+Smoking_statusCurrent     0.863901  2.372397  0.024971 34.596  &lt; 2e-16 ***
+Smoking_statusPrevious    0.171028  1.186524  0.019480  8.780  &lt; 2e-16 ***
+UKB_centreBirmingham     -0.002458  0.997545  0.071553 -0.034 0.972595    
+UKB_centreBristol        -0.033257  0.967290  0.064998 -0.512 0.608894    
+UKB_centreBury            0.169318  1.184497  0.065526  2.584 0.009767 ** 
+UKB_centreCardiff         0.048245  1.049428  0.072930  0.662 0.508276    
+UKB_centreCroydon         0.003938  1.003946  0.070215  0.056 0.955273    
+UKB_centreEdinburgh       0.109151  1.115331  0.071257  1.532 0.125575    
+UKB_centreGlasgow         0.145384  1.156484  0.070048  2.076 0.037939 *  
+UKB_centreLeeds          -0.081601  0.921640  0.062489 -1.306 0.191607    
+UKB_centreLiverpool       0.013492  1.013584  0.065989  0.204 0.837991    
+UKB_centreManchester     -0.018731  0.981443  0.075389 -0.248 0.803777    
+UKB_centreMiddlesborough  0.018251  1.018419  0.070794  0.258 0.796557    
+UKB_centreNewcastle      -0.022029  0.978212  0.066129 -0.333 0.739044    
+UKB_centreNottingham      0.020192  1.020398  0.066431  0.304 0.761157    
+UKB_centreOxford         -0.060203  0.941574  0.078946 -0.763 0.445715    
+UKB_centreReading        -0.094110  0.910182  0.068409 -1.376 0.168916    
+UKB_centreSheffield       0.016122  1.016253  0.067750  0.238 0.811907    
+UKB_centreStoke          -0.037203  0.963481  0.071415 -0.521 0.602409    
+UKB_centreSwansea         0.417125  1.517592  0.117249  3.558 0.000374 ***
+UKB_centreWrexham        -0.022106  0.978137  0.306992 -0.072 0.942595    
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+                         exp(coef) exp(-coef) lower .95 upper .95
+AO.fev1fvc                  1.6572     0.6034    1.5803     1.738
+SexMale                     1.4548     0.6874    1.4055     1.506
+bmi                         1.0268     0.9739    1.0232     1.030
+EthnicityWhite              0.9413     1.0624    0.8780     1.009
+Smoking_statusCurrent       2.3724     0.4215    2.2591     2.491
+Smoking_statusPrevious      1.1865     0.8428    1.1421     1.233
+UKB_centreBirmingham        0.9975     1.0025    0.8670     1.148
+UKB_centreBristol           0.9673     1.0338    0.8516     1.099
+UKB_centreBury              1.1845     0.8442    1.0417     1.347
+UKB_centreCardiff           1.0494     0.9529    0.9097     1.211
+UKB_centreCroydon           1.0039     0.9961    0.8749     1.152
+UKB_centreEdinburgh         1.1153     0.8966    0.9699     1.283
+UKB_centreGlasgow           1.1565     0.8647    1.0081     1.327
+UKB_centreLeeds             0.9216     1.0850    0.8154     1.042
+UKB_centreLiverpool         1.0136     0.9866    0.8906     1.154
+UKB_centreManchester        0.9814     1.0189    0.8466     1.138
+UKB_centreMiddlesborough    1.0184     0.9819    0.8865     1.170
+UKB_centreNewcastle         0.9782     1.0223    0.8593     1.114
+UKB_centreNottingham        1.0204     0.9800    0.8958     1.162
+UKB_centreOxford            0.9416     1.0621    0.8066     1.099
+UKB_centreReading           0.9102     1.0987    0.7960     1.041
+UKB_centreSheffield         1.0163     0.9840    0.8899     1.161
+UKB_centreStoke             0.9635     1.0379    0.8376     1.108
+UKB_centreSwansea           1.5176     0.6589    1.2060     1.910
+UKB_centreWrexham           0.9781     1.0224    0.5359     1.785
+
+Concordance= 0.619  (se = 0.003 )
+Likelihood ratio test= 2726  on 25 df,   p=&lt;2e-16
+Wald test            = 3080  on 25 df,   p=&lt;2e-16
+Score (logrank) test = 3237  on 25 df,   p=&lt;2e-16</code></pre>
+</div>
+</div>
+<section id="export-results-in-a-table" class="level2">
+<h2 class="anchored" data-anchor-id="export-results-in-a-table">Export results in a table</h2>
+<p>From the summary results, we can export the results in a table, where <code>exp(coef)</code> corresponds to the Hazard Ratio (HR), we also report the 95% Confidence Intervals and the P-Value for our outcome and each covariate.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>coxph_LTRC_airflow <span class="sc">%&gt;%</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tbl_regression</span>(<span class="at">exponentiate =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bold_p</span>(<span class="at">t =</span> <span class="fl">0.05</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">modify_table_styling</span>(</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">columns =</span> <span class="st">"label"</span>,</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">rows =</span> variable <span class="sc">==</span> <span class="st">"AO.fev1fvc"</span>,</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">label =</span> <span class="st">"Airflow obstruction"</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="etcxzkoexi" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#etcxzkoexi table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#etcxzkoexi thead, #etcxzkoexi tbody, #etcxzkoexi tfoot, #etcxzkoexi tr, #etcxzkoexi td, #etcxzkoexi th {
+  border-style: none;
+}
+
+#etcxzkoexi p {
+  margin: 0;
+  padding: 0;
+}
+
+#etcxzkoexi .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#etcxzkoexi .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#etcxzkoexi .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#etcxzkoexi .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#etcxzkoexi .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#etcxzkoexi .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#etcxzkoexi .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#etcxzkoexi .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#etcxzkoexi .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#etcxzkoexi .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#etcxzkoexi .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#etcxzkoexi .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#etcxzkoexi .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#etcxzkoexi .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#etcxzkoexi .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#etcxzkoexi .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#etcxzkoexi .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#etcxzkoexi .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#etcxzkoexi .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#etcxzkoexi .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#etcxzkoexi .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#etcxzkoexi .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#etcxzkoexi .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#etcxzkoexi .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#etcxzkoexi .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#etcxzkoexi .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#etcxzkoexi .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#etcxzkoexi .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#etcxzkoexi .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#etcxzkoexi .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#etcxzkoexi .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#etcxzkoexi .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#etcxzkoexi .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#etcxzkoexi .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#etcxzkoexi .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#etcxzkoexi .gt_left {
+  text-align: left;
+}
+
+#etcxzkoexi .gt_center {
+  text-align: center;
+}
+
+#etcxzkoexi .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#etcxzkoexi .gt_font_normal {
+  font-weight: normal;
+}
+
+#etcxzkoexi .gt_font_bold {
+  font-weight: bold;
+}
+
+#etcxzkoexi .gt_font_italic {
+  font-style: italic;
+}
+
+#etcxzkoexi .gt_super {
+  font-size: 65%;
+}
+
+#etcxzkoexi .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#etcxzkoexi .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#etcxzkoexi .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#etcxzkoexi .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#etcxzkoexi .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#etcxzkoexi .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#etcxzkoexi .gt_indent_5 {
+  text-indent: 25px;
+}
+</style>
+
+<table class="gt_table caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header gt_col_headings">
+<th id="Airflow obstruction" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">Airflow obstruction</th>
+<th id="<strong>HR</strong><span class=&quot;gt_footnote_marks&quot; style=&quot;white-space:nowrap;font-style:italic;font-weight:normal;&quot;><sup>1</sup></span>" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col"><strong>HR</strong><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>1</sup></span></th>
+<th id="<strong>95% CI</strong><span class=&quot;gt_footnote_marks&quot; style=&quot;white-space:nowrap;font-style:italic;font-weight:normal;&quot;><sup>1</sup></span>" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col"><strong>95% CI</strong><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>1</sup></span></th>
+<th id="<strong>p-value</strong>" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col"><strong>p-value</strong></th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<td class="gt_row gt_left" headers="label">AO.fev1fvc</td>
+<td class="gt_row gt_center" headers="estimate">1.66</td>
+<td class="gt_row gt_center" headers="ci">1.58, 1.74</td>
+<td class="gt_row gt_center" headers="p.value" style="font-weight: bold">&lt;0.001</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="label">Sex</td>
+<td class="gt_row gt_center" headers="estimate"><br>
+</td>
+<td class="gt_row gt_center" headers="ci"><br>
+</td>
+<td class="gt_row gt_center" headers="p.value"><br>
+</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Female</td>
+<td class="gt_row gt_center" headers="estimate">—</td>
+<td class="gt_row gt_center" headers="ci">—</td>
+<td class="gt_row gt_center" headers="p.value"><br>
+</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Male</td>
+<td class="gt_row gt_center" headers="estimate">1.45</td>
+<td class="gt_row gt_center" headers="ci">1.41, 1.51</td>
+<td class="gt_row gt_center" headers="p.value" style="font-weight: bold">&lt;0.001</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="label">bmi</td>
+<td class="gt_row gt_center" headers="estimate">1.03</td>
+<td class="gt_row gt_center" headers="ci">1.02, 1.03</td>
+<td class="gt_row gt_center" headers="p.value" style="font-weight: bold">&lt;0.001</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="label">Ethnicity</td>
+<td class="gt_row gt_center" headers="estimate"><br>
+</td>
+<td class="gt_row gt_center" headers="ci"><br>
+</td>
+<td class="gt_row gt_center" headers="p.value"><br>
+</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Other</td>
+<td class="gt_row gt_center" headers="estimate">—</td>
+<td class="gt_row gt_center" headers="ci">—</td>
+<td class="gt_row gt_center" headers="p.value"><br>
+</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;White</td>
+<td class="gt_row gt_center" headers="estimate">0.94</td>
+<td class="gt_row gt_center" headers="ci">0.88, 1.01</td>
+<td class="gt_row gt_center" headers="p.value">0.088</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="label">Smoking_status</td>
+<td class="gt_row gt_center" headers="estimate"><br>
+</td>
+<td class="gt_row gt_center" headers="ci"><br>
+</td>
+<td class="gt_row gt_center" headers="p.value"><br>
+</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Never</td>
+<td class="gt_row gt_center" headers="estimate">—</td>
+<td class="gt_row gt_center" headers="ci">—</td>
+<td class="gt_row gt_center" headers="p.value"><br>
+</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Current</td>
+<td class="gt_row gt_center" headers="estimate">2.37</td>
+<td class="gt_row gt_center" headers="ci">2.26, 2.49</td>
+<td class="gt_row gt_center" headers="p.value" style="font-weight: bold">&lt;0.001</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Previous</td>
+<td class="gt_row gt_center" headers="estimate">1.19</td>
+<td class="gt_row gt_center" headers="ci">1.14, 1.23</td>
+<td class="gt_row gt_center" headers="p.value" style="font-weight: bold">&lt;0.001</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="label">UKB_centre</td>
+<td class="gt_row gt_center" headers="estimate"><br>
+</td>
+<td class="gt_row gt_center" headers="ci"><br>
+</td>
+<td class="gt_row gt_center" headers="p.value"><br>
+</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Barts</td>
+<td class="gt_row gt_center" headers="estimate">—</td>
+<td class="gt_row gt_center" headers="ci">—</td>
+<td class="gt_row gt_center" headers="p.value"><br>
+</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Birmingham</td>
+<td class="gt_row gt_center" headers="estimate">1.00</td>
+<td class="gt_row gt_center" headers="ci">0.87, 1.15</td>
+<td class="gt_row gt_center" headers="p.value">&gt;0.9</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Bristol</td>
+<td class="gt_row gt_center" headers="estimate">0.97</td>
+<td class="gt_row gt_center" headers="ci">0.85, 1.10</td>
+<td class="gt_row gt_center" headers="p.value">0.6</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Bury</td>
+<td class="gt_row gt_center" headers="estimate">1.18</td>
+<td class="gt_row gt_center" headers="ci">1.04, 1.35</td>
+<td class="gt_row gt_center" headers="p.value" style="font-weight: bold">0.010</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Cardiff</td>
+<td class="gt_row gt_center" headers="estimate">1.05</td>
+<td class="gt_row gt_center" headers="ci">0.91, 1.21</td>
+<td class="gt_row gt_center" headers="p.value">0.5</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Croydon</td>
+<td class="gt_row gt_center" headers="estimate">1.00</td>
+<td class="gt_row gt_center" headers="ci">0.87, 1.15</td>
+<td class="gt_row gt_center" headers="p.value">&gt;0.9</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Edinburgh</td>
+<td class="gt_row gt_center" headers="estimate">1.12</td>
+<td class="gt_row gt_center" headers="ci">0.97, 1.28</td>
+<td class="gt_row gt_center" headers="p.value">0.13</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Glasgow</td>
+<td class="gt_row gt_center" headers="estimate">1.16</td>
+<td class="gt_row gt_center" headers="ci">1.01, 1.33</td>
+<td class="gt_row gt_center" headers="p.value" style="font-weight: bold">0.038</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Leeds</td>
+<td class="gt_row gt_center" headers="estimate">0.92</td>
+<td class="gt_row gt_center" headers="ci">0.82, 1.04</td>
+<td class="gt_row gt_center" headers="p.value">0.2</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Liverpool</td>
+<td class="gt_row gt_center" headers="estimate">1.01</td>
+<td class="gt_row gt_center" headers="ci">0.89, 1.15</td>
+<td class="gt_row gt_center" headers="p.value">0.8</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Manchester</td>
+<td class="gt_row gt_center" headers="estimate">0.98</td>
+<td class="gt_row gt_center" headers="ci">0.85, 1.14</td>
+<td class="gt_row gt_center" headers="p.value">0.8</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Middlesborough</td>
+<td class="gt_row gt_center" headers="estimate">1.02</td>
+<td class="gt_row gt_center" headers="ci">0.89, 1.17</td>
+<td class="gt_row gt_center" headers="p.value">0.8</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Newcastle</td>
+<td class="gt_row gt_center" headers="estimate">0.98</td>
+<td class="gt_row gt_center" headers="ci">0.86, 1.11</td>
+<td class="gt_row gt_center" headers="p.value">0.7</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Nottingham</td>
+<td class="gt_row gt_center" headers="estimate">1.02</td>
+<td class="gt_row gt_center" headers="ci">0.90, 1.16</td>
+<td class="gt_row gt_center" headers="p.value">0.8</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Oxford</td>
+<td class="gt_row gt_center" headers="estimate">0.94</td>
+<td class="gt_row gt_center" headers="ci">0.81, 1.10</td>
+<td class="gt_row gt_center" headers="p.value">0.4</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Reading</td>
+<td class="gt_row gt_center" headers="estimate">0.91</td>
+<td class="gt_row gt_center" headers="ci">0.80, 1.04</td>
+<td class="gt_row gt_center" headers="p.value">0.2</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Sheffield</td>
+<td class="gt_row gt_center" headers="estimate">1.02</td>
+<td class="gt_row gt_center" headers="ci">0.89, 1.16</td>
+<td class="gt_row gt_center" headers="p.value">0.8</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Stoke</td>
+<td class="gt_row gt_center" headers="estimate">0.96</td>
+<td class="gt_row gt_center" headers="ci">0.84, 1.11</td>
+<td class="gt_row gt_center" headers="p.value">0.6</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Swansea</td>
+<td class="gt_row gt_center" headers="estimate">1.52</td>
+<td class="gt_row gt_center" headers="ci">1.21, 1.91</td>
+<td class="gt_row gt_center" headers="p.value" style="font-weight: bold">&lt;0.001</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Wrexham</td>
+<td class="gt_row gt_center" headers="estimate">0.98</td>
+<td class="gt_row gt_center" headers="ci">0.54, 1.79</td>
+<td class="gt_row gt_center" headers="p.value">&gt;0.9</td>
+</tr>
+</tbody><tfoot class="gt_footnotes">
+<tr class="even">
+<td colspan="4" class="gt_footnote"><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>1</sup></span> HR = Hazard Ratio, CI = Confidence Interval</td>
+</tr>
+</tfoot>
+
+</table>
+
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Save table as docx</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="co">#flex_tbl &lt;- as_flex_table(tb1)</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Save as Word document</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="co">#read_docx() %&gt;%</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="co">#  body_add_flextable(value = flex_tbl) %&gt;%</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="co">#  print(target = "allcause_mortality.docx")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="present-results-in-a-forest-plot" class="level2">
+<h2 class="anchored" data-anchor-id="present-results-in-a-forest-plot">Present results in a forest plot</h2>
+<p>The results from the Cox Proportional Hazard model may also be presented in a graphical manner using a forest plot.</p>
+<section id="forest-plot-with-all-variables-that-were-included-in-the-model" class="level3">
+<h3 class="anchored" data-anchor-id="forest-plot-with-all-variables-that-were-included-in-the-model">Forest plot with all variables that were included in the model</h3>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="survival_analysis_files/figure-html/unnamed-chunk-10-1.png" style="width:100.0%;height:100.0%" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="forest-plot-selecting-variables-we-want-to-present" class="level3">
+<h3 class="anchored" data-anchor-id="forest-plot-selecting-variables-we-want-to-present">Forest plot selecting variables we want to present</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract the coefficients and confidence intervals</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>coefs <span class="ot">&lt;-</span> <span class="fu">summary</span>(coxph_LTRC_airflow)<span class="sc">$</span>coefficients</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>confint <span class="ot">&lt;-</span> <span class="fu">summary</span>(coxph_LTRC_airflow)<span class="sc">$</span>conf.int</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Exclude UKB_centre variables</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>exclude_indices <span class="ot">&lt;-</span> <span class="fu">grepl</span>(<span class="st">"UKB_centre"</span>, <span class="fu">rownames</span>(coefs))</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>coefs <span class="ot">&lt;-</span> coefs[<span class="sc">!</span>exclude_indices, ]</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>confint <span class="ot">&lt;-</span> confint[<span class="sc">!</span>exclude_indices, ]</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a dataframe for plotting</span></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>forest_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">Variable =</span> <span class="fu">rownames</span>(coefs),</span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">HR =</span> coefs[, <span class="st">"exp(coef)"</span>],</span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">LowerCI =</span> confint[, <span class="st">"lower .95"</span>],</span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">UpperCI =</span> confint[, <span class="st">"upper .95"</span>]</span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Rename the specific variable</span></span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Optionally, clean up other variable names for better readability</span></span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a>forest_data<span class="sc">$</span>Variable <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(forest_data<span class="sc">$</span>Variable <span class="sc">==</span> <span class="st">"AO.fev1fvc"</span>, <span class="st">"Airflow obstruction"</span>, forest_data<span class="sc">$</span>Variable)</span>
+<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a>forest_data<span class="sc">$</span>Variable <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(forest_data<span class="sc">$</span>Variable <span class="sc">==</span> <span class="st">"bmi"</span>, <span class="st">"BMI"</span>, forest_data<span class="sc">$</span>Variable)</span>
+<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a>forest_data<span class="sc">$</span>Variable <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(forest_data<span class="sc">$</span>Variable <span class="sc">==</span> <span class="st">"EthnicityWhite"</span>, <span class="st">"European (White) Ancestry"</span>, forest_data<span class="sc">$</span>Variable)</span>
+<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a>forest_data<span class="sc">$</span>Variable <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(forest_data<span class="sc">$</span>Variable <span class="sc">==</span> <span class="st">"SexMale"</span>, <span class="st">"Males"</span>, forest_data<span class="sc">$</span>Variable)</span>
+<span id="cb16-27"><a href="#cb16-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-28"><a href="#cb16-28" aria-hidden="true" tabindex="-1"></a>forest_data<span class="sc">$</span>Variable <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(forest_data<span class="sc">$</span>Variable <span class="sc">==</span> <span class="st">"Smoking_statusCurrent"</span>, <span class="st">"Current Smokers"</span>, forest_data<span class="sc">$</span>Variable)</span>
+<span id="cb16-29"><a href="#cb16-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-30"><a href="#cb16-30" aria-hidden="true" tabindex="-1"></a>forest_data<span class="sc">$</span>Variable <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(forest_data<span class="sc">$</span>Variable <span class="sc">==</span> <span class="st">"Smoking_statusPrevious"</span>, <span class="st">"Previous Smokers"</span>, forest_data<span class="sc">$</span>Variable)</span>
+<span id="cb16-31"><a href="#cb16-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-32"><a href="#cb16-32" aria-hidden="true" tabindex="-1"></a><span class="co"># Specify the desired order of variables</span></span>
+<span id="cb16-33"><a href="#cb16-33" aria-hidden="true" tabindex="-1"></a>desired_order <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Airflow obstruction"</span>, <span class="st">"BMI"</span>, <span class="st">"European (White) Ancestry"</span>, <span class="st">"Males"</span>, <span class="st">"Current Smokers"</span>, <span class="st">"Previous Smokers"</span>)</span>
+<span id="cb16-34"><a href="#cb16-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-35"><a href="#cb16-35" aria-hidden="true" tabindex="-1"></a><span class="co"># Set the levels of the Variable column according to the desired order</span></span>
+<span id="cb16-36"><a href="#cb16-36" aria-hidden="true" tabindex="-1"></a>forest_data<span class="sc">$</span>Variable <span class="ot">&lt;-</span> <span class="fu">factor</span>(forest_data<span class="sc">$</span>Variable, <span class="at">levels =</span> <span class="fu">rev</span>(desired_order))</span>
+<span id="cb16-37"><a href="#cb16-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-38"><a href="#cb16-38" aria-hidden="true" tabindex="-1"></a><span class="co"># Create the forest plot</span></span>
+<span id="cb16-39"><a href="#cb16-39" aria-hidden="true" tabindex="-1"></a>forest_plot <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(forest_data, <span class="fu">aes</span>(<span class="at">x =</span> HR, <span class="at">y =</span> Variable)) <span class="sc">+</span></span>
+<span id="cb16-40"><a href="#cb16-40" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb16-41"><a href="#cb16-41" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_errorbarh</span>(<span class="fu">aes</span>(<span class="at">xmin =</span> LowerCI, <span class="at">xmax =</span> UpperCI), <span class="at">height =</span> <span class="fl">0.2</span>) <span class="sc">+</span></span>
+<span id="cb16-42"><a href="#cb16-42" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="dv">1</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
+<span id="cb16-43"><a href="#cb16-43" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Forest Plot for Cox Proportional Hazards Model"</span>,</span>
+<span id="cb16-44"><a href="#cb16-44" aria-hidden="true" tabindex="-1"></a>         <span class="at">x =</span> <span class="st">"Hazard Ratio"</span>,</span>
+<span id="cb16-45"><a href="#cb16-45" aria-hidden="true" tabindex="-1"></a>         <span class="at">y =</span> <span class="st">"Variables"</span>) <span class="sc">+</span></span>
+<span id="cb16-46"><a href="#cb16-46" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_minimal</span>()</span>
+<span id="cb16-47"><a href="#cb16-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-48"><a href="#cb16-48" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the plot</span></span>
+<span id="cb16-49"><a href="#cb16-49" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(forest_plot)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="survival_analysis_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+</section>
+<section id="interpretation-of-results" class="level1">
+<h1>Interpretation of results</h1>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="help/page3.png" class="img-fluid figure-img"></p>
+<figcaption>Think, think, think</figcaption>
+</figure>
+</div>
+<p>From these results, we can conclude that:</p>
+<ul>
+<li><p>Participants with airflow obstruction have significantly increased all cause mortality risk compared to participants without airflow obstruction (HR = 1.66, 95% CI = 1.58, 1.74)</p></li>
+<li><p>The risk is 1.45 times higher in males compared to females</p></li>
+<li><p>The risk is 2.37 times higher among current smokers and 1.19 times among previous smokers compared to never smokers</p></li>
+<li><p>Model is adjusted for age (as used as the time scale), sex, smoking status, BMI, Ethnicity and UK Biobank Centre</p></li>
+</ul>
+<p>Similar conclusions can be drawn from the other predictor variable used, but the idea is to report the change in risk between the two groups we are comparing.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/ImperialCollegeLondon\.github\.io\/ReCoDE_Survival_analysis_LTRC_data\/");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

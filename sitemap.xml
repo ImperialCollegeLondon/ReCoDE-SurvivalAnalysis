@@ -1,3 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://ImperialCollegeLondon.github.io/ReCoDE_Survival_analysis_LTRC_data/introduction.html</loc>
+    <lastmod>2024-07-04T15:16:35.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://ImperialCollegeLondon.github.io/ReCoDE_Survival_analysis_LTRC_data/LICENSE.html</loc>
+    <lastmod>2024-07-04T15:16:34.888Z</lastmod>
+  </url>
+  <url>
+    <loc>https://ImperialCollegeLondon.github.io/ReCoDE_Survival_analysis_LTRC_data/survival_analysis.html</loc>
+    <lastmod>2024-07-04T15:16:35.024Z</lastmod>
+  </url>
+  <url>
+    <loc>https://ImperialCollegeLondon.github.io/ReCoDE_Survival_analysis_LTRC_data/extension.html</loc>
+    <lastmod>2024-07-04T15:16:34.992Z</lastmod>
+  </url>
+  <url>
+    <loc>https://ImperialCollegeLondon.github.io/ReCoDE_Survival_analysis_LTRC_data/data_curation.html</loc>
+    <lastmod>2024-07-04T15:16:34.992Z</lastmod>
+  </url>
+  <url>
+    <loc>https://ImperialCollegeLondon.github.io/ReCoDE_Survival_analysis_LTRC_data/index.html</loc>
+    <lastmod>2024-07-04T15:16:35.000Z</lastmod>
+  </url>
 </urlset>

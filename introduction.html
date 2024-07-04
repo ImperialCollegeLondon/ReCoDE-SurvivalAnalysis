@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>ReCoDE Project</title>
+<title>Introduction – ReCoDE Project</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -66,6 +66,9 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
+<script src="site_libs/quarto-diagram/mermaid.min.js"></script>
+<script src="site_libs/quarto-diagram/mermaid-init.js"></script>
+<link href="site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
 
 
 <link rel="stylesheet" href="styles.css">
@@ -89,7 +92,7 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="./introduction.html"> 
+    <a class="nav-link active" href="./introduction.html" aria-current="page"> 
 <span class="menu-text">Introduction</span></a>
   </li>  
   <li class="nav-item">
@@ -120,10 +123,17 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#cracking-times-code-survival-analysis-of-large-datasets" id="toc-cracking-times-code-survival-analysis-of-large-datasets" class="nav-link active" data-scroll-target="#cracking-times-code-survival-analysis-of-large-datasets">Cracking time’s code: Survival analysis of large datasets</a>
+  <li><a href="#welcome-to-the-survival-analysis-of-left-truncated-and-right-censored-data-recode-project" id="toc-welcome-to-the-survival-analysis-of-left-truncated-and-right-censored-data-recode-project" class="nav-link active" data-scroll-target="#welcome-to-the-survival-analysis-of-left-truncated-and-right-censored-data-recode-project">Welcome to the Survival analysis of Left-Truncated and Right-Censored data ReCoDe Project</a>
   <ul class="collapse">
-  <li><a href="#description-of-the-project" id="toc-description-of-the-project" class="nav-link" data-scroll-target="#description-of-the-project">Description of the project</a></li>
-  <li><a href="#learning-outcomes" id="toc-learning-outcomes" class="nav-link" data-scroll-target="#learning-outcomes">Learning Outcomes</a></li>
+  <li><a href="#project-layout" id="toc-project-layout" class="nav-link" data-scroll-target="#project-layout">Project Layout</a></li>
+  </ul></li>
+  <li><a href="#learning-outcomes" id="toc-learning-outcomes" class="nav-link" data-scroll-target="#learning-outcomes">Learning outcomes</a>
+  <ul class="collapse">
+  <li><a href="#pre-requisites" id="toc-pre-requisites" class="nav-link" data-scroll-target="#pre-requisites">Pre-requisites</a></li>
+  </ul></li>
+  <li><a href="#introductory-and-teaching-materials" id="toc-introductory-and-teaching-materials" class="nav-link" data-scroll-target="#introductory-and-teaching-materials">Introductory and teaching materials</a>
+  <ul class="collapse">
+  <li><a href="#survival-analysis-of-left-truncated-and-right-censored-data-using-the-uk-biobank" id="toc-survival-analysis-of-left-truncated-and-right-censored-data-using-the-uk-biobank" class="nav-link" data-scroll-target="#survival-analysis-of-left-truncated-and-right-censored-data-using-the-uk-biobank">Survival analysis of Left-Truncated and Right-Censored Data using the UK Biobank</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -131,64 +141,104 @@ ul.task-list li input[type="checkbox"] {
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Introduction</h1>
+</div>
 
 
 
-<section id="cracking-times-code-survival-analysis-of-large-datasets" class="level1">
-<h1>Cracking time’s code: Survival analysis of large datasets</h1>
-<section id="by-valentina-quintero-santofimio-imperial-college-london" class="level4">
-<h4 class="anchored" data-anchor-id="by-valentina-quintero-santofimio-imperial-college-london">By Valentina Quintero Santofimio, Imperial College London</h4>
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="welcome-to-the-survival-analysis-of-left-truncated-and-right-censored-data-recode-project" class="level2">
+<h2 class="anchored" data-anchor-id="welcome-to-the-survival-analysis-of-left-truncated-and-right-censored-data-recode-project">Welcome to the Survival analysis of Left-Truncated and Right-Censored data ReCoDe Project</h2>
+<p>This project is designed to guide you through the process of performing survival analysis using large cohort data. Survival analysis, also known as time-to-event analysis, is a statistical method used to quantify the risk and timing of events, such as death, disease onset, or other significant occurrences. This type of analysis is particularly powerful in medical and epidemiological research, where understanding the duration until an event occurs can provide critical insights into patient outcomes and treatment efficacy.</p>
+<p>It is structured into a series of sections, which will introduce you to the fundamental concepts, techniques, and applications of survival analysis. The aim is for you to learn how to manage and analyse large data sets, apply appropriate statistical models, interpret results, and draw meaningful conclusions about survival probabilities and hazard functions.</p>
+<section id="project-layout" class="level3">
+<h3 class="anchored" data-anchor-id="project-layout">Project Layout</h3>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">flowchart LR
+  A(Data Curation) --&gt; B(Cox Proportional Regression Model)
+  B --&gt; C(Univariate Analysis)
+  B --&gt; D(Multivariate Analysis)
+  C --&gt; E[Kaplan -Meier Curve]
+  C --&gt; F[Log-Rank Test]
+  D --&gt; G[Hazard Ratio Table]
+  D --&gt; H[Forest Plot]
+  
+  F --&gt; I{Interpretation of results}
+  E --&gt; I
+  G --&gt; I
+  H --&gt; I
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
 </section>
-<section id="description-of-the-project" class="level2">
-<h2 class="anchored" data-anchor-id="description-of-the-project">Description of the project</h2>
-<p>This is a special type of analysis that takes into consideration when the event occurred rather than if the event occurred. In other words, we are focused on acquiring the rate, which is the number of events per unit time. In this exemplar will introduce you to the concept of survival analysis (also known as a time-to-event analysis) using large data sets using R.</p>
-<ol type="1">
-<li><p>Firstly, I will highlight the steps needed to effectively clean the data, including correct censoring of the participants.</p></li>
-<li><p>Secondly, I will demonstrate two approaches: a univariate and a multivariate Cox Proportional regression model (which allows the incorporation of confounders).</p></li>
-<li><p>Thirdly, we will be able to estimate the hazard ratio of an event occurring between two groups and present our findings in a Kaplan-Meier curve (univariate analysis) or in a table/forest plot (multivariate analysis).</p></li>
-</ol>
-<p>This special type of analysis allows to calculate the risk of the event (disease, death, etc.) occurring at a given time (hazard ratio). A common timescale used in survival analysis is time-to-event, however in large cohort studies data may be left-truncated (participants entering the study at different time points), making the time-scale unsuitable. Instead, age should be considered as the timescale. This is most relevant when exploring age-dependent associations between exposures and outcomes. Therefore, it ensures accurate estimation of hazard risk and median survival times, preventing underestimation.</p>
-<section id="quick-summary" class="level4">
-<h4 class="anchored" data-anchor-id="quick-summary">Quick summary</h4>
-<p>In summary, survival analysis using large cohort data may be challenging and require comprehensive understanding of the data to ensure correct interpretation of the results.</p>
 </section>
-</section>
-<section id="learning-outcomes" class="level2">
-<h2 class="anchored" data-anchor-id="learning-outcomes">Learning Outcomes</h2>
+<section id="learning-outcomes" class="level1">
+<h1>Learning outcomes</h1>
+<p>At the end of this project you should be able to:</p>
 <ul>
-<li>Understand the different types of censoring and how to curate your data</li>
+<li>To understand the different types of censoring and how to curate your data</li>
 <li>Conduct univariate and multivariate survival analysis using R</li>
 <li>Graphically present the findings of a survival analysis</li>
 <li>Interpret the results from a survival analysis</li>
 </ul>
-<table class="caption-top table">
-<thead>
-<tr class="header">
-<th>Task</th>
-<th>Time</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><a href="./introduction.html">Introduction</a></td>
-<td>2 hours</td>
-</tr>
-<tr class="even">
-<td><a href="./data_curation.html">Data curation</a></td>
-<td>2 hours</td>
-</tr>
-<tr class="odd">
-<td><a href="./survival_analysis.html">Survival analysis</a></td>
-<td>3 hours</td>
-</tr>
-<tr class="even">
-<td><a href="./extension.html">Extension task: Advanced survival analysis</a></td>
-<td>2 hours</td>
-</tr>
-</tbody>
-</table>
+<section id="pre-requisites" class="level2">
+<h2 class="anchored" data-anchor-id="pre-requisites">Pre-requisites</h2>
+<p>It would be very useful to take some courses offered by the Graduate School at Imperial College London, either as an introduction or a refresher:</p>
+<p>Research Computing &amp; Data Science Skills Courses</p>
+<ul>
+<li><a href="https://www.imperial.ac.uk/students/academic-support/graduate-school/professional-development/doctoral-students/research-computing-data-science/courses/data-exploration-visualisation/">Data Exploration and Visualisation</a></li>
+<li><a href="https://www.imperial.ac.uk/students/academic-support/graduate-school/professional-development/doctoral-students/research-computing-data-science/courses/r-programming/">Introduction to R</a></li>
+<li><a href="https://www.imperial.ac.uk/students/academic-support/graduate-school/professional-development/doctoral-students/research-computing-data-science/courses/data-processing-with-r/">Data Processing with R</a></li>
+</ul>
+</section>
+</section>
+<section id="introductory-and-teaching-materials" class="level1">
+<h1>Introductory and teaching materials</h1>
+<p>The following lecture aims to give you an overview of what survival analysis is. It also includes sections explaining the different types of censoring and truncation that need to be considered when conducting a survival analysis.</p>
+<p>There is an example using the UK Biobank data which gives you an insight into how to interprete the results and top tips to consider.</p>
+<section id="survival-analysis-of-left-truncated-and-right-censored-data-using-the-uk-biobank" class="level2">
+<h2 class="anchored" data-anchor-id="survival-analysis-of-left-truncated-and-right-censored-data-using-the-uk-biobank">Survival analysis of Left-Truncated and Right-Censored Data using the UK Biobank</h2>
+<div class="quarto-video ratio ratio-16x9"><iframe data-external="1" src="https://www.youtube.com/embed/EQINE14AP1U" title="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe></div>
+<section id="other-resources" class="level4">
+<h4 class="anchored" data-anchor-id="other-resources">Other resources</h4>
+<p><a href="https://www.math.ntnu.no/emner/ST2304/2020v/RIntro/Introduction_to_R.pdf">NTUN Lecture: Introduction to R</a></p>
+<p><a href="http://www.uop.edu.pk/ocontents/survival-analysis-self-learning-book.pdf">Survival Analysis Textbook</a></p>
+<p><a href="https://www.emilyzabor.com/tutorials/survival_analysis_in_r_tutorial.html#Conditional_survival">Advanced Survival Analysis Blog</a></p>
+</section>
+<section id="further-reading" class="level4">
+<h4 class="anchored" data-anchor-id="further-reading">Further reading</h4>
+<p><a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC1065034/pdf/cc2955.pdf">Survival analysis: An Overview</a></p>
+<p><a href="https://academic.oup.com/biomedgerontology/article/53A/5/M337/588259?login=false">Survival analysis of left truncated data</a></p>
+<p><a href="https://www.sciencedirect.com/science/article/pii/S1047279721001575">Survival analysis using age as time scale</a></p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="help/page1.jpg" class="img-fluid figure-img"></p>
+<figcaption>You can do this!</figcaption>
+</figure>
+</div>
 
 
+</section>
 </section>
 </section>
 
