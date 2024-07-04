@@ -1,3 +1,4 @@
+
 # Cracking time's code: Survival analysis of large datasets
 
 #### By Valentina Quintero Santofimio, Imperial College London
@@ -27,7 +28,7 @@ In summary, survival analysis using large cohort data may be challenging and req
 
 | Task                                                        | Time    |
 |-------------------------------------------------------------|---------|
-| [Introduction](introduction.qmd)                            | 2 hours |
+| [Introduction](introduction.qmd)                            | 3 hours |
 | [Data curation](data_curation.qmd)                          | 2 hours |
 | [Survival analysis](survival_analysis.qmd)                  | 3 hours |
 | [Extension task: Advanced survival analysis](extension.qmd) | 2 hours |
