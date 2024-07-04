@@ -1,0 +1,73 @@
+---
+title: "Introduction"
+---
+
+## Welcome to the Survival analysis of Left-Truncated and Right-Censored data ReCoDe Project
+
+This project is designed to guide you through the process of performing survival analysis using large cohort data. Survival analysis, also known as time-to-event analysis, is a statistical method used to quantify the risk and timing of events, such as death, disease onset, or other significant occurrences. This type of analysis is particularly powerful in medical and epidemiological research, where understanding the duration until an event occurs can provide critical insights into patient outcomes and treatment efficacy.
+
+It is structured into a series of sections, which will introduce you to the fundamental concepts, techniques, and applications of survival analysis. The aim is for you to learn how to manage and analyse large data sets, apply appropriate statistical models, interpret results, and draw meaningful conclusions about survival probabilities and hazard functions.
+
+### Project Layout
+
+```{mermaid}
+flowchart LR
+  A(Data Curation) --> B(Cox Proportional Regression Model)
+  B --> C(Univariate Analysis)
+  B --> D(Multivariate Analysis)
+  C --> E[Kaplan -Meier Curve]
+  C --> F[Log-Rank Test]
+  D --> G[Hazard Ratio Table]
+  D --> H[Forest Plot]
+  
+  F --> I{Interpretation of results}
+  E --> I
+  G --> I
+  H --> I
+```
+
+# Learning outcomes
+
+At the end of this project you should be able to:
+
+-   To understand the different types of censoring and how to curate your data
+-   Conduct univariate and multivariate survival analysis using R
+-   Graphically present the findings of a survival analysis
+-   Interpret the results from a survival analysis
+
+## Pre-requisites
+
+It would be very useful to take some courses offered by the Graduate School at Imperial College London, either as an introduction or a refresher:
+
+Research Computing & Data Science Skills Courses
+
+-   [Data Exploration and Visualisation](https://www.imperial.ac.uk/students/academic-support/graduate-school/professional-development/doctoral-students/research-computing-data-science/courses/data-exploration-visualisation/)
+-   [Introduction to R](https://www.imperial.ac.uk/students/academic-support/graduate-school/professional-development/doctoral-students/research-computing-data-science/courses/r-programming/)
+-   [Data Processing with R](https://www.imperial.ac.uk/students/academic-support/graduate-school/professional-development/doctoral-students/research-computing-data-science/courses/data-processing-with-r/)
+
+# Introductory and teaching materials
+
+The following lecture aims to give you an overview of what survival analysis is. It also includes sections explaining the different types of censoring and truncation that need to be considered when conducting a survival analysis.
+
+There is an example using the UK Biobank data which gives you an insight into how to interprete the results and top tips to consider.
+
+## Survival analysis of Left-Truncated and Right-Censored Data using the UK Biobank
+
+{{< video https://www.youtube.com/watch?v=EQINE14AP1U >}}
+
+#### Other resources
+
+[NTUN Lecture: Introduction to R](https://www.math.ntnu.no/emner/ST2304/2020v/RIntro/Introduction_to_R.pdf)
+
+[Survival Analysis Textbook](http://www.uop.edu.pk/ocontents/survival-analysis-self-learning-book.pdf)
+
+[Advanced Survival Analysis Blog](https://www.emilyzabor.com/tutorials/survival_analysis_in_r_tutorial.html#Conditional_survival)
+
+#### Further reading 
+[Survival analysis: An Overview](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC1065034/pdf/cc2955.pdf)
+
+[Survival analysis of left truncated data](https://academic.oup.com/biomedgerontology/article/53A/5/M337/588259?login=false)
+
+[Survival analysis using age as time scale](https://www.sciencedirect.com/science/article/pii/S1047279721001575)
+
+![You can do this!](help/page1.jpg)

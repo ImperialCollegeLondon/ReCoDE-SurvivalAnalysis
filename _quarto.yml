@@ -1,0 +1,25 @@
+project:
+  type: website
+
+website:
+  title: "ReCoDE Project"
+  navbar:
+    left:
+      - href: introduction.qmd
+        text: Introduction
+      - href: data_curation.qmd
+        text: Data curation
+      - href: survival_analysis.qmd
+        text: Survival Analysis
+      - href: extension.qmd
+        text: Advanced Survival Analysis
+        
+
+format:
+  html:
+    theme: cosmo
+    css: styles.css
+    toc: true
+
+editor: visual
+
