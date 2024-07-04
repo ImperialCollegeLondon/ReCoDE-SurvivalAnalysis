@@ -151,3 +151,5 @@ Here are some extra bits and pieces to help you with this ReCoDE project includi
 #### Statistics glossary
 
 -   [Stats definitions](help/stats_glossary.pdf)
+
+![Congratulations you did it!](help/final.jpg)
