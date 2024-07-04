@@ -116,7 +116,7 @@ summary_table <- data.frame(
   Survival = summary_fit1$surv,
   Standard.Error = summary_fit1$std.err,
   Lower.CI = summary_fit1$lower,
-  Upper.CI = summary_fit1$upper, 
+  Upper.CI = summary_fit1$upper
   )
 
 # Display the summary table
