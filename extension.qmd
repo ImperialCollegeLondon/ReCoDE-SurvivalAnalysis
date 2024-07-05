@@ -22,7 +22,7 @@ More info on [International Classification of Disease V.10](https://icd.who.int/
 
 #### Note: Remember to remove external cause of death if present in your data. In this example there are no external causes of death, however the code to remove it has been added as a comment below
 
-```{r}
+```{r message=FALSE}
 load("data/result.RData")
 
 library(dplyr)
@@ -54,7 +54,7 @@ death2 <- death %>%
 
 ## Censoring of the data using different types of death
 
-```{r}
+```{r message=FALSE}
 #| warning: false
 #Same as above but now with the different types of death 
 
@@ -81,7 +81,7 @@ death2$neoplasm_death <- as.numeric(death2$neoplasm_death)
 
 ## Multivariate survival analysis, stratified by cause of death
 
-```{r}
+```{r message=FALSE}
 #| warning: false
 library(survival)
 library(survminer)
@@ -152,4 +152,4 @@ Here are some extra bits and pieces to help you with this ReCoDE project includi
 
 -   [Stats definitions](help/stats_glossary.pdf)
 
-![Congratulations you did it!](help/final.jpg)
+![Congratulations you did it!](help/final.jpg){width="50%"}

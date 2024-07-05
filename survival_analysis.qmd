@@ -269,7 +269,7 @@ print(forest_plot)
 
 # Interpretation of results
 
-![Think, think, think](help/page3.png)
+![Think, think, think](help/page3.png){width="30%"}
 
 From these results, we can conclude that:
 
