@@ -70,4 +70,4 @@ There is an example using the UK Biobank data which gives you an insight into ho
 
 [Survival analysis using age as time scale](https://www.sciencedirect.com/science/article/pii/S1047279721001575)
 
-![You can do this!](help/page1.jpg)
+![You can do this!](help/page1.jpg){width="50%"}

@@ -32,3 +32,9 @@ In summary, survival analysis using large cohort data may be challenging and req
 | [Data curation](data_curation.qmd)                          | 2 hours |
 | [Survival analysis](survival_analysis.qmd)                  | 3 hours |
 | [Extension task: Advanced survival analysis](extension.qmd) | 2 hours |
+
+
+![Let's get coding](help/recode_website_index.png){width="50%"}
+
+
+
