@@ -242,109 +242,96 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="st">"data/result.RData"</span>)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>
-Attaching package: 'dplyr'</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>The following objects are masked from 'package:stats':
-
-    filter, lag</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>The following objects are masked from 'package:base':
-
-    intersect, setdiff, setequal, union</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the ICD-10 code ranges for each category</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>cardiovascular_codes <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">paste0</span>(<span class="st">"I"</span>, <span class="dv">0</span><span class="sc">:</span><span class="dv">999</span>))</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>respiratory_codes <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">paste0</span>(<span class="st">"J"</span>, <span class="dv">0</span><span class="sc">:</span><span class="dv">999</span>))</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>neoplasm_codes <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">paste0</span>(<span class="st">"C"</span>, <span class="dv">0</span><span class="sc">:</span><span class="dv">99</span>), <span class="fu">paste0</span>(<span class="st">"D0"</span>, <span class="dv">0</span><span class="sc">:</span><span class="dv">99</span>), <span class="fu">paste0</span>(<span class="st">"D1"</span>, <span class="dv">0</span><span class="sc">:</span><span class="dv">99</span>), <span class="fu">paste0</span>(<span class="st">"D2"</span>, <span class="dv">0</span><span class="sc">:</span><span class="dv">99</span>), <span class="fu">paste0</span>(<span class="st">"D3"</span>, <span class="dv">0</span><span class="sc">:</span><span class="dv">99</span>), <span class="fu">paste0</span>(<span class="st">"D4"</span>, <span class="dv">0</span><span class="sc">:</span><span class="dv">99</span>))</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co">#external_causes &lt;- c(paste0("V", 0:99), paste0("W", 0:99), paste0("X", 0:99), paste0("Y", 0:99))</span></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Create new variables for each category</span></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>death2 <span class="ot">&lt;-</span> death <span class="sc">%&gt;%</span></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">cardiovascular_death =</span> <span class="fu">ifelse</span>(cofdmain <span class="sc">%in%</span> cardiovascular_codes, <span class="dv">1</span>, <span class="dv">0</span>),</span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">respiratory_death =</span> <span class="fu">ifelse</span>(cofdmain <span class="sc">%in%</span> respiratory_codes, <span class="dv">1</span>, <span class="dv">0</span>),</span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">neoplasm_death =</span> <span class="fu">ifelse</span>(cofdmain <span class="sc">%in%</span> neoplasm_codes, <span class="dv">1</span>, <span class="dv">0</span>)<span class="co">#,</span></span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>    <span class="co">#external_cause_death = ifelse(cofdmain %in% external_causes, 1, 0)</span></span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Exclude external causes from the other categories</span></span>
-<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="co">#death2 &lt;- death %&gt;%</span></span>
-<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a> <span class="co"># mutate(</span></span>
-<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>  <span class="co">#  cardiovascular_death = ifelse(external_cause_death == 1, 0, cardiovascular_death),</span></span>
-<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>   <span class="co"># respiratory_death = ifelse(external_cause_death == 1, 0, respiratory_death),</span></span>
-<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>    <span class="co">#neoplasm_death = ifelse(external_cause_death == 1, 0, neoplasm_death)</span></span>
-<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a><span class="co">#  )</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the ICD-10 code ranges for each category</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>cardiovascular_codes <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">paste0</span>(<span class="st">"I"</span>, <span class="dv">0</span><span class="sc">:</span><span class="dv">999</span>))</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>respiratory_codes <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">paste0</span>(<span class="st">"J"</span>, <span class="dv">0</span><span class="sc">:</span><span class="dv">999</span>))</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>neoplasm_codes <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">paste0</span>(<span class="st">"C"</span>, <span class="dv">0</span><span class="sc">:</span><span class="dv">99</span>), <span class="fu">paste0</span>(<span class="st">"D0"</span>, <span class="dv">0</span><span class="sc">:</span><span class="dv">99</span>), <span class="fu">paste0</span>(<span class="st">"D1"</span>, <span class="dv">0</span><span class="sc">:</span><span class="dv">99</span>), <span class="fu">paste0</span>(<span class="st">"D2"</span>, <span class="dv">0</span><span class="sc">:</span><span class="dv">99</span>), <span class="fu">paste0</span>(<span class="st">"D3"</span>, <span class="dv">0</span><span class="sc">:</span><span class="dv">99</span>), <span class="fu">paste0</span>(<span class="st">"D4"</span>, <span class="dv">0</span><span class="sc">:</span><span class="dv">99</span>))</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co">#external_causes &lt;- c(paste0("V", 0:99), paste0("W", 0:99), paste0("X", 0:99), paste0("Y", 0:99))</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Create new variables for each category</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>death2 <span class="ot">&lt;-</span> death <span class="sc">%&gt;%</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">cardiovascular_death =</span> <span class="fu">ifelse</span>(cofdmain <span class="sc">%in%</span> cardiovascular_codes, <span class="dv">1</span>, <span class="dv">0</span>),</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">respiratory_death =</span> <span class="fu">ifelse</span>(cofdmain <span class="sc">%in%</span> respiratory_codes, <span class="dv">1</span>, <span class="dv">0</span>),</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">neoplasm_death =</span> <span class="fu">ifelse</span>(cofdmain <span class="sc">%in%</span> neoplasm_codes, <span class="dv">1</span>, <span class="dv">0</span>)<span class="co">#,</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>    <span class="co">#external_cause_death = ifelse(cofdmain %in% external_causes, 1, 0)</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Exclude external causes from the other categories</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="co">#death2 &lt;- death %&gt;%</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a> <span class="co"># mutate(</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>  <span class="co">#  cardiovascular_death = ifelse(external_cause_death == 1, 0, cardiovascular_death),</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>   <span class="co"># respiratory_death = ifelse(external_cause_death == 1, 0, respiratory_death),</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>    <span class="co">#neoplasm_death = ifelse(external_cause_death == 1, 0, neoplasm_death)</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="co">#  )</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 </section>
 <section id="censoring-of-the-data-using-different-types-of-death" class="level2">
 <h2 class="anchored" data-anchor-id="censoring-of-the-data-using-different-types-of-death">Censoring of the data using different types of death</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Same as above but now with the different types of death </span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co">#Cardiovascular mortality </span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>death2<span class="sc">$</span>cardiovascular_death <span class="ot">&lt;-</span> <span class="fu">as.character</span>(death2<span class="sc">$</span>cardiovascular_death)</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>death2<span class="sc">$</span>cardiovascular_death[<span class="fu">is.na</span>(death2<span class="sc">$</span>cardiovascular_death)] <span class="ot">&lt;-</span> <span class="dv">0</span> <span class="co">#No event occured (ALIVE)</span></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>death2<span class="sc">$</span>cardiovascular_death[death2<span class="sc">$</span>cardiovascular_death <span class="sc">&gt;</span> <span class="dv">0</span>] <span class="ot">&lt;-</span> <span class="dv">1</span></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>death2<span class="sc">$</span>cardiovascular_death <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(death2<span class="sc">$</span>cardiovascular_death)</span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="co">#Respiratory mortality</span></span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>death2<span class="sc">$</span>respiratory_death <span class="ot">&lt;-</span> <span class="fu">as.character</span>(death2<span class="sc">$</span>respiratory_death)</span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>death2<span class="sc">$</span>respiratory_death[<span class="fu">is.na</span>(death2<span class="sc">$</span>respiratory_death)] <span class="ot">&lt;-</span> <span class="dv">0</span> <span class="co">#No event occured (ALIVE)</span></span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>death2<span class="sc">$</span>respiratory_death[death2<span class="sc">$</span>respiratory_death <span class="sc">&gt;</span> <span class="dv">0</span>] <span class="ot">&lt;-</span> <span class="dv">1</span></span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>death2<span class="sc">$</span>respiratory_death <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(death2<span class="sc">$</span>respiratory_death)</span>
-<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="co">#Neoplasm mortality</span></span>
-<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>death2<span class="sc">$</span>neoplasm_death <span class="ot">&lt;-</span> <span class="fu">as.character</span>(death2<span class="sc">$</span>neoplasm_death)</span>
-<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>death2<span class="sc">$</span>neoplasm_death[<span class="fu">is.na</span>(death2<span class="sc">$</span>neoplasm_death)] <span class="ot">&lt;-</span> <span class="dv">0</span> <span class="co">#No event occured (ALIVE)</span></span>
-<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>death2<span class="sc">$</span>neoplasm_death[death2<span class="sc">$</span>neoplasm_death <span class="sc">&gt;</span> <span class="dv">0</span>] <span class="ot">&lt;-</span> <span class="dv">1</span></span>
-<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>death2<span class="sc">$</span>neoplasm_death <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(death2<span class="sc">$</span>neoplasm_death)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Same as above but now with the different types of death </span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co">#Cardiovascular mortality </span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>death2<span class="sc">$</span>cardiovascular_death <span class="ot">&lt;-</span> <span class="fu">as.character</span>(death2<span class="sc">$</span>cardiovascular_death)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>death2<span class="sc">$</span>cardiovascular_death[<span class="fu">is.na</span>(death2<span class="sc">$</span>cardiovascular_death)] <span class="ot">&lt;-</span> <span class="dv">0</span> <span class="co">#No event occured (ALIVE)</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>death2<span class="sc">$</span>cardiovascular_death[death2<span class="sc">$</span>cardiovascular_death <span class="sc">&gt;</span> <span class="dv">0</span>] <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>death2<span class="sc">$</span>cardiovascular_death <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(death2<span class="sc">$</span>cardiovascular_death)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co">#Respiratory mortality</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>death2<span class="sc">$</span>respiratory_death <span class="ot">&lt;-</span> <span class="fu">as.character</span>(death2<span class="sc">$</span>respiratory_death)</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>death2<span class="sc">$</span>respiratory_death[<span class="fu">is.na</span>(death2<span class="sc">$</span>respiratory_death)] <span class="ot">&lt;-</span> <span class="dv">0</span> <span class="co">#No event occured (ALIVE)</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>death2<span class="sc">$</span>respiratory_death[death2<span class="sc">$</span>respiratory_death <span class="sc">&gt;</span> <span class="dv">0</span>] <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>death2<span class="sc">$</span>respiratory_death <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(death2<span class="sc">$</span>respiratory_death)</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="co">#Neoplasm mortality</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>death2<span class="sc">$</span>neoplasm_death <span class="ot">&lt;-</span> <span class="fu">as.character</span>(death2<span class="sc">$</span>neoplasm_death)</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>death2<span class="sc">$</span>neoplasm_death[<span class="fu">is.na</span>(death2<span class="sc">$</span>neoplasm_death)] <span class="ot">&lt;-</span> <span class="dv">0</span> <span class="co">#No event occured (ALIVE)</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>death2<span class="sc">$</span>neoplasm_death[death2<span class="sc">$</span>neoplasm_death <span class="sc">&gt;</span> <span class="dv">0</span>] <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>death2<span class="sc">$</span>neoplasm_death <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(death2<span class="sc">$</span>neoplasm_death)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="multivariate-survival-analysis-stratified-by-cause-of-death" class="level2">
 <h2 class="anchored" data-anchor-id="multivariate-survival-analysis-stratified-by-cause-of-death">Multivariate survival analysis, stratified by cause of death</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(survival)</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(survminer)</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gtsummary)</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="co">#Order smoking status correctly</span></span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>death2<span class="sc">$</span>Smoking_status <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(death2<span class="sc">$</span>Smoking_status)</span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>death2<span class="sc">$</span>Smoking_status <span class="ot">&lt;-</span> <span class="fu">relevel</span>(death2<span class="sc">$</span>Smoking_status, <span class="at">ref =</span> <span class="st">"Never"</span>)</span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="co">#All cause mortality adjusted for covariates</span></span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="co">#E.g. Cardiovascular mortality </span></span>
-<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>LTRC_ats <span class="ot">&lt;-</span> <span class="fu">Surv</span>(<span class="at">time =</span>death2<span class="sc">$</span>Age, <span class="at">time2 =</span> death2<span class="sc">$</span>time_years, <span class="at">event =</span> death2<span class="sc">$</span>cardiovascular_death) <span class="co">#Change type of death here </span></span>
-<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>coxph_LTRC_airflow <span class="ot">&lt;-</span> <span class="fu">coxph</span>(LTRC_ats <span class="sc">~</span> AO.fev1fvc <span class="sc">+</span> Sex <span class="sc">+</span> bmi <span class="sc">+</span> Ethnicity <span class="sc">+</span> Smoking_status <span class="sc">+</span> UKB_centre, <span class="at">data =</span> death2)</span>
-<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>coxph_LTRC_airflow <span class="sc">%&gt;%</span> <span class="fu">tbl_regression</span>(<span class="at">exponentiate=</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span> <span class="fu">bold_p</span>(<span class="at">t =</span> <span class="fl">0.05</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(survival)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(survminer)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gtsummary)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co">#Order smoking status correctly</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>death2<span class="sc">$</span>Smoking_status <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(death2<span class="sc">$</span>Smoking_status)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>death2<span class="sc">$</span>Smoking_status <span class="ot">&lt;-</span> <span class="fu">relevel</span>(death2<span class="sc">$</span>Smoking_status, <span class="at">ref =</span> <span class="st">"Never"</span>)</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="co">#All cause mortality adjusted for covariates</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="co">#E.g. Cardiovascular mortality </span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>LTRC_ats <span class="ot">&lt;-</span> <span class="fu">Surv</span>(<span class="at">time =</span>death2<span class="sc">$</span>Age, <span class="at">time2 =</span> death2<span class="sc">$</span>time_years, <span class="at">event =</span> death2<span class="sc">$</span>cardiovascular_death) <span class="co">#Change type of death here </span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>coxph_LTRC_airflow <span class="ot">&lt;-</span> <span class="fu">coxph</span>(LTRC_ats <span class="sc">~</span> AO.fev1fvc <span class="sc">+</span> Sex <span class="sc">+</span> bmi <span class="sc">+</span> Ethnicity <span class="sc">+</span> Smoking_status <span class="sc">+</span> UKB_centre, <span class="at">data =</span> death2)</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>coxph_LTRC_airflow <span class="sc">%&gt;%</span> <span class="fu">tbl_regression</span>(<span class="at">exponentiate=</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span> <span class="fu">bold_p</span>(<span class="at">t =</span> <span class="fl">0.05</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<div id="rkxhbmqepj" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#rkxhbmqepj table {
+<div id="lgasntbxeg" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#lgasntbxeg table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#rkxhbmqepj thead, #rkxhbmqepj tbody, #rkxhbmqepj tfoot, #rkxhbmqepj tr, #rkxhbmqepj td, #rkxhbmqepj th {
+#lgasntbxeg thead, #lgasntbxeg tbody, #lgasntbxeg tfoot, #lgasntbxeg tr, #lgasntbxeg td, #lgasntbxeg th {
   border-style: none;
 }
 
-#rkxhbmqepj p {
+#lgasntbxeg p {
   margin: 0;
   padding: 0;
 }
 
-#rkxhbmqepj .gt_table {
+#lgasntbxeg .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -370,12 +357,12 @@ Attaching package: 'dplyr'</code></pre>
   border-left-color: #D3D3D3;
 }
 
-#rkxhbmqepj .gt_caption {
+#lgasntbxeg .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#rkxhbmqepj .gt_title {
+#lgasntbxeg .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -387,7 +374,7 @@ Attaching package: 'dplyr'</code></pre>
   border-bottom-width: 0;
 }
 
-#rkxhbmqepj .gt_subtitle {
+#lgasntbxeg .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -399,7 +386,7 @@ Attaching package: 'dplyr'</code></pre>
   border-top-width: 0;
 }
 
-#rkxhbmqepj .gt_heading {
+#lgasntbxeg .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -411,13 +398,13 @@ Attaching package: 'dplyr'</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#rkxhbmqepj .gt_bottom_border {
+#lgasntbxeg .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#rkxhbmqepj .gt_col_headings {
+#lgasntbxeg .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -432,7 +419,7 @@ Attaching package: 'dplyr'</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#rkxhbmqepj .gt_col_heading {
+#lgasntbxeg .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -452,7 +439,7 @@ Attaching package: 'dplyr'</code></pre>
   overflow-x: hidden;
 }
 
-#rkxhbmqepj .gt_column_spanner_outer {
+#lgasntbxeg .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -464,15 +451,15 @@ Attaching package: 'dplyr'</code></pre>
   padding-right: 4px;
 }
 
-#rkxhbmqepj .gt_column_spanner_outer:first-child {
+#lgasntbxeg .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#rkxhbmqepj .gt_column_spanner_outer:last-child {
+#lgasntbxeg .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#rkxhbmqepj .gt_column_spanner {
+#lgasntbxeg .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -484,11 +471,11 @@ Attaching package: 'dplyr'</code></pre>
   width: 100%;
 }
 
-#rkxhbmqepj .gt_spanner_row {
+#lgasntbxeg .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#rkxhbmqepj .gt_group_heading {
+#lgasntbxeg .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -514,7 +501,7 @@ Attaching package: 'dplyr'</code></pre>
   text-align: left;
 }
 
-#rkxhbmqepj .gt_empty_group_heading {
+#lgasntbxeg .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -529,15 +516,15 @@ Attaching package: 'dplyr'</code></pre>
   vertical-align: middle;
 }
 
-#rkxhbmqepj .gt_from_md > :first-child {
+#lgasntbxeg .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#rkxhbmqepj .gt_from_md > :last-child {
+#lgasntbxeg .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#rkxhbmqepj .gt_row {
+#lgasntbxeg .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -556,7 +543,7 @@ Attaching package: 'dplyr'</code></pre>
   overflow-x: hidden;
 }
 
-#rkxhbmqepj .gt_stub {
+#lgasntbxeg .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -569,7 +556,7 @@ Attaching package: 'dplyr'</code></pre>
   padding-right: 5px;
 }
 
-#rkxhbmqepj .gt_stub_row_group {
+#lgasntbxeg .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -583,15 +570,15 @@ Attaching package: 'dplyr'</code></pre>
   vertical-align: top;
 }
 
-#rkxhbmqepj .gt_row_group_first td {
+#lgasntbxeg .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#rkxhbmqepj .gt_row_group_first th {
+#lgasntbxeg .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#rkxhbmqepj .gt_summary_row {
+#lgasntbxeg .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -601,16 +588,16 @@ Attaching package: 'dplyr'</code></pre>
   padding-right: 5px;
 }
 
-#rkxhbmqepj .gt_first_summary_row {
+#lgasntbxeg .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#rkxhbmqepj .gt_first_summary_row.thick {
+#lgasntbxeg .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#rkxhbmqepj .gt_last_summary_row {
+#lgasntbxeg .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -620,7 +607,7 @@ Attaching package: 'dplyr'</code></pre>
   border-bottom-color: #D3D3D3;
 }
 
-#rkxhbmqepj .gt_grand_summary_row {
+#lgasntbxeg .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -630,7 +617,7 @@ Attaching package: 'dplyr'</code></pre>
   padding-right: 5px;
 }
 
-#rkxhbmqepj .gt_first_grand_summary_row {
+#lgasntbxeg .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -640,7 +627,7 @@ Attaching package: 'dplyr'</code></pre>
   border-top-color: #D3D3D3;
 }
 
-#rkxhbmqepj .gt_last_grand_summary_row_top {
+#lgasntbxeg .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -650,11 +637,11 @@ Attaching package: 'dplyr'</code></pre>
   border-bottom-color: #D3D3D3;
 }
 
-#rkxhbmqepj .gt_striped {
+#lgasntbxeg .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#rkxhbmqepj .gt_table_body {
+#lgasntbxeg .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -663,7 +650,7 @@ Attaching package: 'dplyr'</code></pre>
   border-bottom-color: #D3D3D3;
 }
 
-#rkxhbmqepj .gt_footnotes {
+#lgasntbxeg .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -677,7 +664,7 @@ Attaching package: 'dplyr'</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#rkxhbmqepj .gt_footnote {
+#lgasntbxeg .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -686,7 +673,7 @@ Attaching package: 'dplyr'</code></pre>
   padding-right: 5px;
 }
 
-#rkxhbmqepj .gt_sourcenotes {
+#lgasntbxeg .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -700,7 +687,7 @@ Attaching package: 'dplyr'</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#rkxhbmqepj .gt_sourcenote {
+#lgasntbxeg .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -708,63 +695,63 @@ Attaching package: 'dplyr'</code></pre>
   padding-right: 5px;
 }
 
-#rkxhbmqepj .gt_left {
+#lgasntbxeg .gt_left {
   text-align: left;
 }
 
-#rkxhbmqepj .gt_center {
+#lgasntbxeg .gt_center {
   text-align: center;
 }
 
-#rkxhbmqepj .gt_right {
+#lgasntbxeg .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#rkxhbmqepj .gt_font_normal {
+#lgasntbxeg .gt_font_normal {
   font-weight: normal;
 }
 
-#rkxhbmqepj .gt_font_bold {
+#lgasntbxeg .gt_font_bold {
   font-weight: bold;
 }
 
-#rkxhbmqepj .gt_font_italic {
+#lgasntbxeg .gt_font_italic {
   font-style: italic;
 }
 
-#rkxhbmqepj .gt_super {
+#lgasntbxeg .gt_super {
   font-size: 65%;
 }
 
-#rkxhbmqepj .gt_footnote_marks {
+#lgasntbxeg .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#rkxhbmqepj .gt_asterisk {
+#lgasntbxeg .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#rkxhbmqepj .gt_indent_1 {
+#lgasntbxeg .gt_indent_1 {
   text-indent: 5px;
 }
 
-#rkxhbmqepj .gt_indent_2 {
+#lgasntbxeg .gt_indent_2 {
   text-indent: 10px;
 }
 
-#rkxhbmqepj .gt_indent_3 {
+#lgasntbxeg .gt_indent_3 {
   text-indent: 15px;
 }
 
-#rkxhbmqepj .gt_indent_4 {
+#lgasntbxeg .gt_indent_4 {
   text-indent: 20px;
 }
 
-#rkxhbmqepj .gt_indent_5 {
+#lgasntbxeg .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
@@ -1009,33 +996,33 @@ Attaching package: 'dplyr'</code></pre>
 
 </div>
 </div>
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>t1 <span class="ot">&lt;-</span> coxph_LTRC_airflow <span class="sc">%&gt;%</span> <span class="fu">tbl_regression</span>(<span class="at">exponentiate=</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span> <span class="fu">bold_p</span>(<span class="at">t =</span> <span class="fl">0.05</span>) </span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co">#summary(coxph_LTRC_airflow)</span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="co">#Respiratory mortality</span></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>LTRC_ats <span class="ot">&lt;-</span> <span class="fu">Surv</span>(<span class="at">time =</span>death2<span class="sc">$</span>Age, <span class="at">time2 =</span> death2<span class="sc">$</span>time_years, <span class="at">event =</span> death2<span class="sc">$</span>respiratory_death) <span class="co">#Change type of death here </span></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>coxph_LTRC_airflow <span class="ot">&lt;-</span> <span class="fu">coxph</span>(LTRC_ats <span class="sc">~</span> AO.fev1fvc <span class="sc">+</span> Sex <span class="sc">+</span> bmi <span class="sc">+</span> Ethnicity <span class="sc">+</span> Smoking_status <span class="sc">+</span> UKB_centre, <span class="at">data =</span> death2)</span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>coxph_LTRC_airflow <span class="sc">%&gt;%</span> <span class="fu">tbl_regression</span>(<span class="at">exponentiate=</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span> <span class="fu">bold_p</span>(<span class="at">t =</span> <span class="fl">0.05</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>t1 <span class="ot">&lt;-</span> coxph_LTRC_airflow <span class="sc">%&gt;%</span> <span class="fu">tbl_regression</span>(<span class="at">exponentiate=</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span> <span class="fu">bold_p</span>(<span class="at">t =</span> <span class="fl">0.05</span>) </span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co">#summary(coxph_LTRC_airflow)</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co">#Respiratory mortality</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>LTRC_ats <span class="ot">&lt;-</span> <span class="fu">Surv</span>(<span class="at">time =</span>death2<span class="sc">$</span>Age, <span class="at">time2 =</span> death2<span class="sc">$</span>time_years, <span class="at">event =</span> death2<span class="sc">$</span>respiratory_death) <span class="co">#Change type of death here </span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>coxph_LTRC_airflow <span class="ot">&lt;-</span> <span class="fu">coxph</span>(LTRC_ats <span class="sc">~</span> AO.fev1fvc <span class="sc">+</span> Sex <span class="sc">+</span> bmi <span class="sc">+</span> Ethnicity <span class="sc">+</span> Smoking_status <span class="sc">+</span> UKB_centre, <span class="at">data =</span> death2)</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>coxph_LTRC_airflow <span class="sc">%&gt;%</span> <span class="fu">tbl_regression</span>(<span class="at">exponentiate=</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span> <span class="fu">bold_p</span>(<span class="at">t =</span> <span class="fl">0.05</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<div id="brhkqakxxq" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#brhkqakxxq table {
+<div id="yohujymupk" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#yohujymupk table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#brhkqakxxq thead, #brhkqakxxq tbody, #brhkqakxxq tfoot, #brhkqakxxq tr, #brhkqakxxq td, #brhkqakxxq th {
+#yohujymupk thead, #yohujymupk tbody, #yohujymupk tfoot, #yohujymupk tr, #yohujymupk td, #yohujymupk th {
   border-style: none;
 }
 
-#brhkqakxxq p {
+#yohujymupk p {
   margin: 0;
   padding: 0;
 }
 
-#brhkqakxxq .gt_table {
+#yohujymupk .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -1061,12 +1048,12 @@ Attaching package: 'dplyr'</code></pre>
   border-left-color: #D3D3D3;
 }
 
-#brhkqakxxq .gt_caption {
+#yohujymupk .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#brhkqakxxq .gt_title {
+#yohujymupk .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1078,7 +1065,7 @@ Attaching package: 'dplyr'</code></pre>
   border-bottom-width: 0;
 }
 
-#brhkqakxxq .gt_subtitle {
+#yohujymupk .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1090,7 +1077,7 @@ Attaching package: 'dplyr'</code></pre>
   border-top-width: 0;
 }
 
-#brhkqakxxq .gt_heading {
+#yohujymupk .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1102,13 +1089,13 @@ Attaching package: 'dplyr'</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#brhkqakxxq .gt_bottom_border {
+#yohujymupk .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#brhkqakxxq .gt_col_headings {
+#yohujymupk .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1123,7 +1110,7 @@ Attaching package: 'dplyr'</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#brhkqakxxq .gt_col_heading {
+#yohujymupk .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1143,7 +1130,7 @@ Attaching package: 'dplyr'</code></pre>
   overflow-x: hidden;
 }
 
-#brhkqakxxq .gt_column_spanner_outer {
+#yohujymupk .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1155,15 +1142,15 @@ Attaching package: 'dplyr'</code></pre>
   padding-right: 4px;
 }
 
-#brhkqakxxq .gt_column_spanner_outer:first-child {
+#yohujymupk .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#brhkqakxxq .gt_column_spanner_outer:last-child {
+#yohujymupk .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#brhkqakxxq .gt_column_spanner {
+#yohujymupk .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1175,11 +1162,11 @@ Attaching package: 'dplyr'</code></pre>
   width: 100%;
 }
 
-#brhkqakxxq .gt_spanner_row {
+#yohujymupk .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#brhkqakxxq .gt_group_heading {
+#yohujymupk .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1205,7 +1192,7 @@ Attaching package: 'dplyr'</code></pre>
   text-align: left;
 }
 
-#brhkqakxxq .gt_empty_group_heading {
+#yohujymupk .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1220,15 +1207,15 @@ Attaching package: 'dplyr'</code></pre>
   vertical-align: middle;
 }
 
-#brhkqakxxq .gt_from_md > :first-child {
+#yohujymupk .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#brhkqakxxq .gt_from_md > :last-child {
+#yohujymupk .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#brhkqakxxq .gt_row {
+#yohujymupk .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1247,7 +1234,7 @@ Attaching package: 'dplyr'</code></pre>
   overflow-x: hidden;
 }
 
-#brhkqakxxq .gt_stub {
+#yohujymupk .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1260,7 +1247,7 @@ Attaching package: 'dplyr'</code></pre>
   padding-right: 5px;
 }
 
-#brhkqakxxq .gt_stub_row_group {
+#yohujymupk .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1274,15 +1261,15 @@ Attaching package: 'dplyr'</code></pre>
   vertical-align: top;
 }
 
-#brhkqakxxq .gt_row_group_first td {
+#yohujymupk .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#brhkqakxxq .gt_row_group_first th {
+#yohujymupk .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#brhkqakxxq .gt_summary_row {
+#yohujymupk .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1292,16 +1279,16 @@ Attaching package: 'dplyr'</code></pre>
   padding-right: 5px;
 }
 
-#brhkqakxxq .gt_first_summary_row {
+#yohujymupk .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#brhkqakxxq .gt_first_summary_row.thick {
+#yohujymupk .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#brhkqakxxq .gt_last_summary_row {
+#yohujymupk .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1311,7 +1298,7 @@ Attaching package: 'dplyr'</code></pre>
   border-bottom-color: #D3D3D3;
 }
 
-#brhkqakxxq .gt_grand_summary_row {
+#yohujymupk .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1321,7 +1308,7 @@ Attaching package: 'dplyr'</code></pre>
   padding-right: 5px;
 }
 
-#brhkqakxxq .gt_first_grand_summary_row {
+#yohujymupk .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1331,7 +1318,7 @@ Attaching package: 'dplyr'</code></pre>
   border-top-color: #D3D3D3;
 }
 
-#brhkqakxxq .gt_last_grand_summary_row_top {
+#yohujymupk .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1341,11 +1328,11 @@ Attaching package: 'dplyr'</code></pre>
   border-bottom-color: #D3D3D3;
 }
 
-#brhkqakxxq .gt_striped {
+#yohujymupk .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#brhkqakxxq .gt_table_body {
+#yohujymupk .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1354,7 +1341,7 @@ Attaching package: 'dplyr'</code></pre>
   border-bottom-color: #D3D3D3;
 }
 
-#brhkqakxxq .gt_footnotes {
+#yohujymupk .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1368,7 +1355,7 @@ Attaching package: 'dplyr'</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#brhkqakxxq .gt_footnote {
+#yohujymupk .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -1377,7 +1364,7 @@ Attaching package: 'dplyr'</code></pre>
   padding-right: 5px;
 }
 
-#brhkqakxxq .gt_sourcenotes {
+#yohujymupk .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1391,7 +1378,7 @@ Attaching package: 'dplyr'</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#brhkqakxxq .gt_sourcenote {
+#yohujymupk .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1399,63 +1386,63 @@ Attaching package: 'dplyr'</code></pre>
   padding-right: 5px;
 }
 
-#brhkqakxxq .gt_left {
+#yohujymupk .gt_left {
   text-align: left;
 }
 
-#brhkqakxxq .gt_center {
+#yohujymupk .gt_center {
   text-align: center;
 }
 
-#brhkqakxxq .gt_right {
+#yohujymupk .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#brhkqakxxq .gt_font_normal {
+#yohujymupk .gt_font_normal {
   font-weight: normal;
 }
 
-#brhkqakxxq .gt_font_bold {
+#yohujymupk .gt_font_bold {
   font-weight: bold;
 }
 
-#brhkqakxxq .gt_font_italic {
+#yohujymupk .gt_font_italic {
   font-style: italic;
 }
 
-#brhkqakxxq .gt_super {
+#yohujymupk .gt_super {
   font-size: 65%;
 }
 
-#brhkqakxxq .gt_footnote_marks {
+#yohujymupk .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#brhkqakxxq .gt_asterisk {
+#yohujymupk .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#brhkqakxxq .gt_indent_1 {
+#yohujymupk .gt_indent_1 {
   text-indent: 5px;
 }
 
-#brhkqakxxq .gt_indent_2 {
+#yohujymupk .gt_indent_2 {
   text-indent: 10px;
 }
 
-#brhkqakxxq .gt_indent_3 {
+#yohujymupk .gt_indent_3 {
   text-indent: 15px;
 }
 
-#brhkqakxxq .gt_indent_4 {
+#yohujymupk .gt_indent_4 {
   text-indent: 20px;
 }
 
-#brhkqakxxq .gt_indent_5 {
+#yohujymupk .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
@@ -1700,32 +1687,32 @@ Attaching package: 'dplyr'</code></pre>
 
 </div>
 </div>
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>t2 <span class="ot">&lt;-</span> coxph_LTRC_airflow <span class="sc">%&gt;%</span> <span class="fu">tbl_regression</span>(<span class="at">exponentiate=</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span> <span class="fu">bold_p</span>(<span class="at">t =</span> <span class="fl">0.05</span>) </span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co">#summary(coxph_LTRC_airflow)</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co">#Respiratory mortality</span></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>LTRC_ats <span class="ot">&lt;-</span> <span class="fu">Surv</span>(<span class="at">time =</span>death2<span class="sc">$</span>Age, <span class="at">time2 =</span> death2<span class="sc">$</span>time_years, <span class="at">event =</span> death2<span class="sc">$</span>neoplasm_death) <span class="co">#Change type of death here </span></span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>coxph_LTRC_airflow <span class="ot">&lt;-</span> <span class="fu">coxph</span>(LTRC_ats <span class="sc">~</span> AO.fev1fvc <span class="sc">+</span> Sex <span class="sc">+</span> bmi <span class="sc">+</span> Ethnicity <span class="sc">+</span> Smoking_status <span class="sc">+</span> UKB_centre, <span class="at">data =</span> death2)</span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>coxph_LTRC_airflow <span class="sc">%&gt;%</span> <span class="fu">tbl_regression</span>(<span class="at">exponentiate=</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span> <span class="fu">bold_p</span>(<span class="at">t =</span> <span class="fl">0.05</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>t2 <span class="ot">&lt;-</span> coxph_LTRC_airflow <span class="sc">%&gt;%</span> <span class="fu">tbl_regression</span>(<span class="at">exponentiate=</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span> <span class="fu">bold_p</span>(<span class="at">t =</span> <span class="fl">0.05</span>) </span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co">#summary(coxph_LTRC_airflow)</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co">#Respiratory mortality</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>LTRC_ats <span class="ot">&lt;-</span> <span class="fu">Surv</span>(<span class="at">time =</span>death2<span class="sc">$</span>Age, <span class="at">time2 =</span> death2<span class="sc">$</span>time_years, <span class="at">event =</span> death2<span class="sc">$</span>neoplasm_death) <span class="co">#Change type of death here </span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>coxph_LTRC_airflow <span class="ot">&lt;-</span> <span class="fu">coxph</span>(LTRC_ats <span class="sc">~</span> AO.fev1fvc <span class="sc">+</span> Sex <span class="sc">+</span> bmi <span class="sc">+</span> Ethnicity <span class="sc">+</span> Smoking_status <span class="sc">+</span> UKB_centre, <span class="at">data =</span> death2)</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>coxph_LTRC_airflow <span class="sc">%&gt;%</span> <span class="fu">tbl_regression</span>(<span class="at">exponentiate=</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span> <span class="fu">bold_p</span>(<span class="at">t =</span> <span class="fl">0.05</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<div id="hjypmuwxwg" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#hjypmuwxwg table {
+<div id="zgdqtoaclm" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#zgdqtoaclm table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#hjypmuwxwg thead, #hjypmuwxwg tbody, #hjypmuwxwg tfoot, #hjypmuwxwg tr, #hjypmuwxwg td, #hjypmuwxwg th {
+#zgdqtoaclm thead, #zgdqtoaclm tbody, #zgdqtoaclm tfoot, #zgdqtoaclm tr, #zgdqtoaclm td, #zgdqtoaclm th {
   border-style: none;
 }
 
-#hjypmuwxwg p {
+#zgdqtoaclm p {
   margin: 0;
   padding: 0;
 }
 
-#hjypmuwxwg .gt_table {
+#zgdqtoaclm .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -1751,12 +1738,12 @@ Attaching package: 'dplyr'</code></pre>
   border-left-color: #D3D3D3;
 }
 
-#hjypmuwxwg .gt_caption {
+#zgdqtoaclm .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#hjypmuwxwg .gt_title {
+#zgdqtoaclm .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1768,7 +1755,7 @@ Attaching package: 'dplyr'</code></pre>
   border-bottom-width: 0;
 }
 
-#hjypmuwxwg .gt_subtitle {
+#zgdqtoaclm .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1780,7 +1767,7 @@ Attaching package: 'dplyr'</code></pre>
   border-top-width: 0;
 }
 
-#hjypmuwxwg .gt_heading {
+#zgdqtoaclm .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1792,13 +1779,13 @@ Attaching package: 'dplyr'</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#hjypmuwxwg .gt_bottom_border {
+#zgdqtoaclm .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#hjypmuwxwg .gt_col_headings {
+#zgdqtoaclm .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1813,7 +1800,7 @@ Attaching package: 'dplyr'</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#hjypmuwxwg .gt_col_heading {
+#zgdqtoaclm .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1833,7 +1820,7 @@ Attaching package: 'dplyr'</code></pre>
   overflow-x: hidden;
 }
 
-#hjypmuwxwg .gt_column_spanner_outer {
+#zgdqtoaclm .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1845,15 +1832,15 @@ Attaching package: 'dplyr'</code></pre>
   padding-right: 4px;
 }
 
-#hjypmuwxwg .gt_column_spanner_outer:first-child {
+#zgdqtoaclm .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#hjypmuwxwg .gt_column_spanner_outer:last-child {
+#zgdqtoaclm .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#hjypmuwxwg .gt_column_spanner {
+#zgdqtoaclm .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1865,11 +1852,11 @@ Attaching package: 'dplyr'</code></pre>
   width: 100%;
 }
 
-#hjypmuwxwg .gt_spanner_row {
+#zgdqtoaclm .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#hjypmuwxwg .gt_group_heading {
+#zgdqtoaclm .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1895,7 +1882,7 @@ Attaching package: 'dplyr'</code></pre>
   text-align: left;
 }
 
-#hjypmuwxwg .gt_empty_group_heading {
+#zgdqtoaclm .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1910,15 +1897,15 @@ Attaching package: 'dplyr'</code></pre>
   vertical-align: middle;
 }
 
-#hjypmuwxwg .gt_from_md > :first-child {
+#zgdqtoaclm .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#hjypmuwxwg .gt_from_md > :last-child {
+#zgdqtoaclm .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#hjypmuwxwg .gt_row {
+#zgdqtoaclm .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1937,7 +1924,7 @@ Attaching package: 'dplyr'</code></pre>
   overflow-x: hidden;
 }
 
-#hjypmuwxwg .gt_stub {
+#zgdqtoaclm .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1950,7 +1937,7 @@ Attaching package: 'dplyr'</code></pre>
   padding-right: 5px;
 }
 
-#hjypmuwxwg .gt_stub_row_group {
+#zgdqtoaclm .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1964,15 +1951,15 @@ Attaching package: 'dplyr'</code></pre>
   vertical-align: top;
 }
 
-#hjypmuwxwg .gt_row_group_first td {
+#zgdqtoaclm .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#hjypmuwxwg .gt_row_group_first th {
+#zgdqtoaclm .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#hjypmuwxwg .gt_summary_row {
+#zgdqtoaclm .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1982,16 +1969,16 @@ Attaching package: 'dplyr'</code></pre>
   padding-right: 5px;
 }
 
-#hjypmuwxwg .gt_first_summary_row {
+#zgdqtoaclm .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#hjypmuwxwg .gt_first_summary_row.thick {
+#zgdqtoaclm .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#hjypmuwxwg .gt_last_summary_row {
+#zgdqtoaclm .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2001,7 +1988,7 @@ Attaching package: 'dplyr'</code></pre>
   border-bottom-color: #D3D3D3;
 }
 
-#hjypmuwxwg .gt_grand_summary_row {
+#zgdqtoaclm .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2011,7 +1998,7 @@ Attaching package: 'dplyr'</code></pre>
   padding-right: 5px;
 }
 
-#hjypmuwxwg .gt_first_grand_summary_row {
+#zgdqtoaclm .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2021,7 +2008,7 @@ Attaching package: 'dplyr'</code></pre>
   border-top-color: #D3D3D3;
 }
 
-#hjypmuwxwg .gt_last_grand_summary_row_top {
+#zgdqtoaclm .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2031,11 +2018,11 @@ Attaching package: 'dplyr'</code></pre>
   border-bottom-color: #D3D3D3;
 }
 
-#hjypmuwxwg .gt_striped {
+#zgdqtoaclm .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#hjypmuwxwg .gt_table_body {
+#zgdqtoaclm .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2044,7 +2031,7 @@ Attaching package: 'dplyr'</code></pre>
   border-bottom-color: #D3D3D3;
 }
 
-#hjypmuwxwg .gt_footnotes {
+#zgdqtoaclm .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2058,7 +2045,7 @@ Attaching package: 'dplyr'</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#hjypmuwxwg .gt_footnote {
+#zgdqtoaclm .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -2067,7 +2054,7 @@ Attaching package: 'dplyr'</code></pre>
   padding-right: 5px;
 }
 
-#hjypmuwxwg .gt_sourcenotes {
+#zgdqtoaclm .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2081,7 +2068,7 @@ Attaching package: 'dplyr'</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#hjypmuwxwg .gt_sourcenote {
+#zgdqtoaclm .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -2089,63 +2076,63 @@ Attaching package: 'dplyr'</code></pre>
   padding-right: 5px;
 }
 
-#hjypmuwxwg .gt_left {
+#zgdqtoaclm .gt_left {
   text-align: left;
 }
 
-#hjypmuwxwg .gt_center {
+#zgdqtoaclm .gt_center {
   text-align: center;
 }
 
-#hjypmuwxwg .gt_right {
+#zgdqtoaclm .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#hjypmuwxwg .gt_font_normal {
+#zgdqtoaclm .gt_font_normal {
   font-weight: normal;
 }
 
-#hjypmuwxwg .gt_font_bold {
+#zgdqtoaclm .gt_font_bold {
   font-weight: bold;
 }
 
-#hjypmuwxwg .gt_font_italic {
+#zgdqtoaclm .gt_font_italic {
   font-style: italic;
 }
 
-#hjypmuwxwg .gt_super {
+#zgdqtoaclm .gt_super {
   font-size: 65%;
 }
 
-#hjypmuwxwg .gt_footnote_marks {
+#zgdqtoaclm .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#hjypmuwxwg .gt_asterisk {
+#zgdqtoaclm .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#hjypmuwxwg .gt_indent_1 {
+#zgdqtoaclm .gt_indent_1 {
   text-indent: 5px;
 }
 
-#hjypmuwxwg .gt_indent_2 {
+#zgdqtoaclm .gt_indent_2 {
   text-indent: 10px;
 }
 
-#hjypmuwxwg .gt_indent_3 {
+#zgdqtoaclm .gt_indent_3 {
   text-indent: 15px;
 }
 
-#hjypmuwxwg .gt_indent_4 {
+#zgdqtoaclm .gt_indent_4 {
   text-indent: 20px;
 }
 
-#hjypmuwxwg .gt_indent_5 {
+#zgdqtoaclm .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
@@ -2390,36 +2377,36 @@ Attaching package: 'dplyr'</code></pre>
 
 </div>
 </div>
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>t3 <span class="ot">&lt;-</span> coxph_LTRC_airflow <span class="sc">%&gt;%</span> <span class="fu">tbl_regression</span>(<span class="at">exponentiate=</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span> <span class="fu">bold_p</span>(<span class="at">t =</span> <span class="fl">0.05</span>) </span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co">#summary(coxph_LTRC_airflow)</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>tbl_merge_ex2 <span class="ot">&lt;-</span></span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tbl_merge</span>(</span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">tbls =</span> <span class="fu">list</span>(t1, t2, t3),</span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">tab_spanner =</span> <span class="fu">c</span>(<span class="st">"**Cardiovascular mortality**"</span>,</span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"**Respiratory mortality**"</span>, <span class="st">"**Neoplasm (cancer) mortality**"</span>)</span>
-<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>tbl_merge_ex2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>t3 <span class="ot">&lt;-</span> coxph_LTRC_airflow <span class="sc">%&gt;%</span> <span class="fu">tbl_regression</span>(<span class="at">exponentiate=</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span> <span class="fu">bold_p</span>(<span class="at">t =</span> <span class="fl">0.05</span>) </span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co">#summary(coxph_LTRC_airflow)</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>tbl_merge_ex2 <span class="ot">&lt;-</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tbl_merge</span>(</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">tbls =</span> <span class="fu">list</span>(t1, t2, t3),</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">tab_spanner =</span> <span class="fu">c</span>(<span class="st">"**Cardiovascular mortality**"</span>,</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"**Respiratory mortality**"</span>, <span class="st">"**Neoplasm (cancer) mortality**"</span>)</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>tbl_merge_ex2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<div id="dmdqbxhnar" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#dmdqbxhnar table {
+<div id="zmrahsmsks" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#zmrahsmsks table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#dmdqbxhnar thead, #dmdqbxhnar tbody, #dmdqbxhnar tfoot, #dmdqbxhnar tr, #dmdqbxhnar td, #dmdqbxhnar th {
+#zmrahsmsks thead, #zmrahsmsks tbody, #zmrahsmsks tfoot, #zmrahsmsks tr, #zmrahsmsks td, #zmrahsmsks th {
   border-style: none;
 }
 
-#dmdqbxhnar p {
+#zmrahsmsks p {
   margin: 0;
   padding: 0;
 }
 
-#dmdqbxhnar .gt_table {
+#zmrahsmsks .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -2445,12 +2432,12 @@ Attaching package: 'dplyr'</code></pre>
   border-left-color: #D3D3D3;
 }
 
-#dmdqbxhnar .gt_caption {
+#zmrahsmsks .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#dmdqbxhnar .gt_title {
+#zmrahsmsks .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -2462,7 +2449,7 @@ Attaching package: 'dplyr'</code></pre>
   border-bottom-width: 0;
 }
 
-#dmdqbxhnar .gt_subtitle {
+#zmrahsmsks .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -2474,7 +2461,7 @@ Attaching package: 'dplyr'</code></pre>
   border-top-width: 0;
 }
 
-#dmdqbxhnar .gt_heading {
+#zmrahsmsks .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -2486,13 +2473,13 @@ Attaching package: 'dplyr'</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#dmdqbxhnar .gt_bottom_border {
+#zmrahsmsks .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#dmdqbxhnar .gt_col_headings {
+#zmrahsmsks .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2507,7 +2494,7 @@ Attaching package: 'dplyr'</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#dmdqbxhnar .gt_col_heading {
+#zmrahsmsks .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2527,7 +2514,7 @@ Attaching package: 'dplyr'</code></pre>
   overflow-x: hidden;
 }
 
-#dmdqbxhnar .gt_column_spanner_outer {
+#zmrahsmsks .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2539,15 +2526,15 @@ Attaching package: 'dplyr'</code></pre>
   padding-right: 4px;
 }
 
-#dmdqbxhnar .gt_column_spanner_outer:first-child {
+#zmrahsmsks .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#dmdqbxhnar .gt_column_spanner_outer:last-child {
+#zmrahsmsks .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#dmdqbxhnar .gt_column_spanner {
+#zmrahsmsks .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -2559,11 +2546,11 @@ Attaching package: 'dplyr'</code></pre>
   width: 100%;
 }
 
-#dmdqbxhnar .gt_spanner_row {
+#zmrahsmsks .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#dmdqbxhnar .gt_group_heading {
+#zmrahsmsks .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2589,7 +2576,7 @@ Attaching package: 'dplyr'</code></pre>
   text-align: left;
 }
 
-#dmdqbxhnar .gt_empty_group_heading {
+#zmrahsmsks .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -2604,15 +2591,15 @@ Attaching package: 'dplyr'</code></pre>
   vertical-align: middle;
 }
 
-#dmdqbxhnar .gt_from_md > :first-child {
+#zmrahsmsks .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#dmdqbxhnar .gt_from_md > :last-child {
+#zmrahsmsks .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#dmdqbxhnar .gt_row {
+#zmrahsmsks .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2631,7 +2618,7 @@ Attaching package: 'dplyr'</code></pre>
   overflow-x: hidden;
 }
 
-#dmdqbxhnar .gt_stub {
+#zmrahsmsks .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2644,7 +2631,7 @@ Attaching package: 'dplyr'</code></pre>
   padding-right: 5px;
 }
 
-#dmdqbxhnar .gt_stub_row_group {
+#zmrahsmsks .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2658,15 +2645,15 @@ Attaching package: 'dplyr'</code></pre>
   vertical-align: top;
 }
 
-#dmdqbxhnar .gt_row_group_first td {
+#zmrahsmsks .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#dmdqbxhnar .gt_row_group_first th {
+#zmrahsmsks .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#dmdqbxhnar .gt_summary_row {
+#zmrahsmsks .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2676,16 +2663,16 @@ Attaching package: 'dplyr'</code></pre>
   padding-right: 5px;
 }
 
-#dmdqbxhnar .gt_first_summary_row {
+#zmrahsmsks .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#dmdqbxhnar .gt_first_summary_row.thick {
+#zmrahsmsks .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#dmdqbxhnar .gt_last_summary_row {
+#zmrahsmsks .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2695,7 +2682,7 @@ Attaching package: 'dplyr'</code></pre>
   border-bottom-color: #D3D3D3;
 }
 
-#dmdqbxhnar .gt_grand_summary_row {
+#zmrahsmsks .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2705,7 +2692,7 @@ Attaching package: 'dplyr'</code></pre>
   padding-right: 5px;
 }
 
-#dmdqbxhnar .gt_first_grand_summary_row {
+#zmrahsmsks .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2715,7 +2702,7 @@ Attaching package: 'dplyr'</code></pre>
   border-top-color: #D3D3D3;
 }
 
-#dmdqbxhnar .gt_last_grand_summary_row_top {
+#zmrahsmsks .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2725,11 +2712,11 @@ Attaching package: 'dplyr'</code></pre>
   border-bottom-color: #D3D3D3;
 }
 
-#dmdqbxhnar .gt_striped {
+#zmrahsmsks .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#dmdqbxhnar .gt_table_body {
+#zmrahsmsks .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2738,7 +2725,7 @@ Attaching package: 'dplyr'</code></pre>
   border-bottom-color: #D3D3D3;
 }
 
-#dmdqbxhnar .gt_footnotes {
+#zmrahsmsks .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2752,7 +2739,7 @@ Attaching package: 'dplyr'</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#dmdqbxhnar .gt_footnote {
+#zmrahsmsks .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -2761,7 +2748,7 @@ Attaching package: 'dplyr'</code></pre>
   padding-right: 5px;
 }
 
-#dmdqbxhnar .gt_sourcenotes {
+#zmrahsmsks .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2775,7 +2762,7 @@ Attaching package: 'dplyr'</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#dmdqbxhnar .gt_sourcenote {
+#zmrahsmsks .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -2783,63 +2770,63 @@ Attaching package: 'dplyr'</code></pre>
   padding-right: 5px;
 }
 
-#dmdqbxhnar .gt_left {
+#zmrahsmsks .gt_left {
   text-align: left;
 }
 
-#dmdqbxhnar .gt_center {
+#zmrahsmsks .gt_center {
   text-align: center;
 }
 
-#dmdqbxhnar .gt_right {
+#zmrahsmsks .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#dmdqbxhnar .gt_font_normal {
+#zmrahsmsks .gt_font_normal {
   font-weight: normal;
 }
 
-#dmdqbxhnar .gt_font_bold {
+#zmrahsmsks .gt_font_bold {
   font-weight: bold;
 }
 
-#dmdqbxhnar .gt_font_italic {
+#zmrahsmsks .gt_font_italic {
   font-style: italic;
 }
 
-#dmdqbxhnar .gt_super {
+#zmrahsmsks .gt_super {
   font-size: 65%;
 }
 
-#dmdqbxhnar .gt_footnote_marks {
+#zmrahsmsks .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#dmdqbxhnar .gt_asterisk {
+#zmrahsmsks .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#dmdqbxhnar .gt_indent_1 {
+#zmrahsmsks .gt_indent_1 {
   text-indent: 5px;
 }
 
-#dmdqbxhnar .gt_indent_2 {
+#zmrahsmsks .gt_indent_2 {
   text-indent: 10px;
 }
 
-#dmdqbxhnar .gt_indent_3 {
+#zmrahsmsks .gt_indent_3 {
   text-indent: 15px;
 }
 
-#dmdqbxhnar .gt_indent_4 {
+#zmrahsmsks .gt_indent_4 {
   text-indent: 20px;
 }
 
-#dmdqbxhnar .gt_indent_5 {
+#zmrahsmsks .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
@@ -3331,9 +3318,9 @@ Attaching package: 'dplyr'</code></pre>
 
 </div>
 </div>
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co">#tbl_merge_ex2 %&gt;%</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a> <span class="co"># as_flex_table() %&gt;%</span></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="co">#flextable::save_as_docx(path = "NAMEs.docx")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">#tbl_merge_ex2 %&gt;%</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a> <span class="co"># as_flex_table() %&gt;%</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="co">#flextable::save_as_docx(path = "NAMEs.docx")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 </section>
@@ -3355,7 +3342,7 @@ Attaching package: 'dplyr'</code></pre>
 </ul>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="help/final.jpg" class="img-fluid figure-img"></p>
+<p><img src="help/final.jpg" class="img-fluid figure-img" style="width:50.0%"></p>
 <figcaption>Congratulations you did it!</figcaption>
 </figure>
 </div>
