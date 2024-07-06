@@ -25,7 +25,7 @@
     "href": "introduction.html#survival-analysis-of-left-truncated-and-right-censored-data-using-the-uk-biobank",
     "title": "Introduction",
     "section": "Survival analysis of Left-Truncated and Right-Censored Data using the UK Biobank",
-    "text": "Survival analysis of Left-Truncated and Right-Censored Data using the UK Biobank\n\n\nOther resources\nNTUN Lecture: Introduction to R\nSurvival Analysis Textbook\nAdvanced Survival Analysis Blog\n\n\nFurther reading\nSurvival analysis: An Overview\nSurvival analysis of left truncated data\nSurvival analysis using age as time scale\n\n\n\nYou can do this!"
+    "text": "Survival analysis of Left-Truncated and Right-Censored Data using the UK Biobank\n\n\nOther resources\nNTUN Lecture: Introduction to R\nSurvival Analysis Textbook\nAdvanced Survival Analysis Blog\n\n\nFurther reading\nSurvival analysis: An Overview\nSurvival analysis of left truncated data\nSurvival analysis using age as time scale\nCox regression model with left truncation\n\n\n\nYou can do this!"
   },
   {
     "objectID": "LICENSE.html",
